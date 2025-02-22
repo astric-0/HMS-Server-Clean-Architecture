@@ -1,19 +1,51 @@
 import { UUIDTypes } from 'uuid';
-import ICommandHandler from '../../Shared/Messaging/ICommandHandler';
-import DownloadMediaFileCommand from './DownloadMediaFileCommand';
 import { CommandHandler } from '@nestjs/cqrs';
+import { Job } from 'bullmq';
+
 import Result from 'src/Media/Domain/Shared/Result';
-import Error from 'src/Media/Domain/Shared/Error';
+import Error, { ErrorType } from 'src/Media/Domain/Shared/Error';
+import DownloadMediaFileCommand from './DownloadMediaFileCommand';
+import ICommandHandler from '../../Shared/Messaging/ICommandHandler';
+import IQueueService from '../../Queue/IQueueService';
+import DownloadFileJobData from 'src/Media/Infrastructure/Queue/DownloadFileQueue/DownloadFileJobData';
+import { Inject } from '@nestjs/common';
 
 @CommandHandler(DownloadMediaFileCommand)
 export default class DownloadMediaFileCommandHandler
   implements ICommandHandler<DownloadMediaFileCommand, UUIDTypes>
 {
-  async execute(command: DownloadMediaFileCommand): Promise<Result<UUIDTypes>> {
-    //throw new Error('Method not implemented.');
-    console.log(command.MasterDirectory);
+  constructor(
+    // @InjectQueue(DownloadFileQueueService.QueueName)
+    @Inject('IQueueService')
+    private readonly downloadQueueService: IQueueService<DownloadFileJobData>,
+  ) {}
 
-    const value = Result.Failure<UUIDTypes>(Error.InValidValue);
-    return await value;
+  private static get DownloadPath() {
+    return './downloads/';
+  }
+
+  public async execute(
+    command: DownloadMediaFileCommand,
+  ): Promise<Result<UUIDTypes>> {
+    const data: DownloadFileJobData = new DownloadFileJobData(
+      command.MediaFileName,
+      command.MasterDirectory,
+      command.URL,
+      DownloadMediaFileCommandHandler.DownloadPath + command.MediaFileName,
+    );
+
+    try {
+      const job: Job<DownloadFileJobData> =
+        await this.downloadQueueService.AddToQueue(data);
+      return Result.Success(job.id);
+    } catch (error) {
+      return Result.Failure(
+        new Error(
+          'MediaFileDownload.Failure',
+          error.message,
+          ErrorType.Failure,
+        ),
+      );
+    }
   }
 }

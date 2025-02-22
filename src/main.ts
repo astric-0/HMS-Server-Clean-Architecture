@@ -1,10 +1,8 @@
 import { NestFactory } from '@nestjs/core';
-import ApiModule from './Api/ApiModule';
-// import { webcrypto } from 'crypto';
-// (global as any).crypto = webcrypto;
+import MainModule from './MainModule';
 
 async function bootstrap() {
-  const app = await NestFactory.create(ApiModule);
+  const app = await NestFactory.create(MainModule);
   console.log('LISTENING');
   await app.listen(process.env.PORT ?? 3000);
 }

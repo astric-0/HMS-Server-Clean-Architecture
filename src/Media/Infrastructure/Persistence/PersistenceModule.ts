@@ -12,7 +12,6 @@ import { ConfigModule } from '@nestjs/config';
       useClass: TypeOrmConfiguration,
       imports: [ConfigModule],
     }),
-    //ConfigModule,
   ],
   providers: [],
   exports: [TypeOrmModule],

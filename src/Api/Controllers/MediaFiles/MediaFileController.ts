@@ -8,12 +8,12 @@ export default class MediaFileController {
   constructor(@Inject<CommandBus>() private readonly commandBus: CommandBus) {}
 
   @Get()
-  sayHello() {
+  sayHi() {
     return { message: 'hi universe' };
   }
 
-  @Post('download')
-  async downloadMediaFile(@Body() body: DownloadMediaFileRequestDto) {
+  @Post()
+  async addMediaFile(@Body() body: DownloadMediaFileRequestDto) {
     const command = new DownloadMediaFileCommand(
       body.FileName,
       body.MasterDirectory,
