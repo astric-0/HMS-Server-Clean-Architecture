@@ -6,12 +6,14 @@ import {
   MediaFileFullPath,
   MediaFileMasterDirectory,
   MediaFileName,
+  MediaFileSize,
 } from './ValueTypes';
 
 export default class MediaFile extends BaseEntity implements IMediaFileRaw {
   #name: MediaFileName;
   #masterDirectory: MediaFileMasterDirectory;
   #fullPath: MediaFileFullPath;
+  #size: MediaFileSize;
 
   static readonly #masterDirectories: string[] = [
     'movie',
@@ -27,23 +29,27 @@ export default class MediaFile extends BaseEntity implements IMediaFileRaw {
     id: UUIDTypes,
     fileName: MediaFileName,
     masterDirectory: MediaFileMasterDirectory,
-    fullPath?: MediaFileFullPath,
+    size: MediaFileSize,
+    fullPath: MediaFileFullPath,
   ) {
     super(id);
     this.#name = fileName;
     this.#masterDirectory = masterDirectory;
+    this.#size = size;
     this.#fullPath = fullPath;
   }
 
   public static Create(
     fileName: MediaFileName,
     masterDirectory: MediaFileMasterDirectory,
+    size: MediaFileSize,
     fullPath: MediaFileFullPath,
   ): MediaFile {
     const mediaFile = new MediaFile(
       uuidv4(),
       fileName,
       masterDirectory,
+      size,
       fullPath,
     );
 
@@ -55,6 +61,7 @@ export default class MediaFile extends BaseEntity implements IMediaFileRaw {
       raw.Id,
       raw.Name,
       raw.MasterDirectory,
+      raw.Size,
       raw.FullPath,
     );
 
@@ -73,5 +80,9 @@ export default class MediaFile extends BaseEntity implements IMediaFileRaw {
 
   public get MasterDirectory(): MediaFileFullPath {
     return this.#masterDirectory;
+  }
+
+  public get Size(): MediaFileSize {
+    return this.#size;
   }
 }

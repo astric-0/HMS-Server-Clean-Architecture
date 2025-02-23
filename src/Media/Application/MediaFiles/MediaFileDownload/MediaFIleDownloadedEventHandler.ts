@@ -9,6 +9,7 @@ import {
   MediaFileFullPath,
   MediaFileMasterDirectory,
   MediaFileName,
+  MediaFileSize,
 } from 'src/Media/Domain/MediaFiles/ValueTypes';
 
 @EventsHandler(MediaFileDownloadedEvent)
@@ -24,6 +25,7 @@ export default class MediaFileDownloadedEventHandler
     const mediaFile: MediaFile = MediaFile.Create(
       new MediaFileName(event.MediaFileName),
       new MediaFileMasterDirectory(event.MediaFileMasterDirectory),
+      new MediaFileSize(event.MediaFileSize),
       new MediaFileFullPath(event.MediaFileFullPath),
     );
 

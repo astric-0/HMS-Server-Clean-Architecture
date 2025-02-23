@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import ApplicationEventPublisher from './ApplicationEventPublisher copy';
+import ApplicationEventPublisher from './ApplicationEventPublisher';
 import { CqrsModule } from '@nestjs/cqrs';
 @Module({
   imports: [CqrsModule],

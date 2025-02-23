@@ -8,7 +8,7 @@ import * as https from 'https';
 import FileDownloadQueueService from './FileDownloadQueueService';
 import FileDownloadJobData from './FileDownloadJobData';
 import IApplicationEventPublisher from 'src/Common/Application/Abstractions/ApplicationPublisher/IApplicationEventPublisher';
-import ApplicationEventPublisher from 'src/Common/Application/ApplicationPublisher/ApplicationEventPublisher copy';
+import ApplicationEventPublisher from 'src/Common/Application/ApplicationPublisher/ApplicationEventPublisher';
 import MediaFileDownloadedEvent from 'src/Media/Application/MediaFiles/MediaFileDownload/MediaFIleDownloadedEvent';
 
 @Processor(FileDownloadQueueService.QueueName, { concurrency: 1 })
@@ -25,13 +25,14 @@ export default class FileDownloadProcessor extends WorkerHost {
       Logger.log(`JOB STARTED: ${job.name}`);
       Logger.log(`JOB DATA: ${JSON.stringify(job.data)}`);
 
-      await this.downloadMedia(job);
+      const totalSize = await this.downloadMedia(job);
 
       this.eventPublisher.Publish(
         new MediaFileDownloadedEvent(
           job.data.MediaFileName,
           job.data.MasterDirectory,
           job.data.FullPath,
+          totalSize,
         ),
       );
     } catch (error) {
@@ -41,7 +42,7 @@ export default class FileDownloadProcessor extends WorkerHost {
     }
   }
 
-  private downloadMedia(job: Job<FileDownloadJobData>): Promise<boolean> {
+  private downloadMedia(job: Job<FileDownloadJobData>): Promise<number> {
     return new Promise((resolve, reject) => {
       const { data } = job;
       try {
@@ -71,7 +72,7 @@ export default class FileDownloadProcessor extends WorkerHost {
 
         response.on('end', () => {
           fileStream.end();
-          resolve(true);
+          resolve(totalBytes);
         });
 
         response.on('error', (error) => {

@@ -5,6 +5,7 @@ import {
   MediaFileFullPath,
   MediaFileMasterDirectory,
   MediaFileName,
+  MediaFileSize,
 } from 'src/Media/Domain/MediaFiles/ValueTypes';
 
 import BaseEntitySchema from './BaseEntitySchema';
@@ -41,6 +42,14 @@ const MediaFileSchema = new EntitySchema<MediaFile>({
           new MediaFileFullPath(value),
         to: (mediaFileFullPath: MediaFileFullPath): string =>
           mediaFileFullPath.Value,
+      },
+    },
+    Size: {
+      name: 'size',
+      type: 'int',
+      transformer: {
+        from: (value: number): MediaFileSize => new MediaFileSize(value),
+        to: (mediaFileSize: MediaFileSize): number => mediaFileSize.Value,
       },
     },
   },
