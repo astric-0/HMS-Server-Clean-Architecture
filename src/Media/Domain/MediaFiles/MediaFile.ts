@@ -1,6 +1,6 @@
 import { UUIDTypes, v4 as uuidv4 } from 'uuid';
 
-import IMediaFileRaw from './IMediaFileRaw';
+import IMediaFileRaw from '../../../Common/Application/Abstractions/Repositories/IMediaFileRaw';
 import BaseEntity from '../BaseEntity';
 import {
   MediaFileFullPath,
@@ -38,8 +38,14 @@ export default class MediaFile extends BaseEntity implements IMediaFileRaw {
   public static Create(
     fileName: MediaFileName,
     masterDirectory: MediaFileMasterDirectory,
+    fullPath: MediaFileFullPath,
   ): MediaFile {
-    const mediaFile = new MediaFile(uuidv4(), fileName, masterDirectory);
+    const mediaFile = new MediaFile(
+      uuidv4(),
+      fileName,
+      masterDirectory,
+      fullPath,
+    );
 
     return mediaFile;
   }

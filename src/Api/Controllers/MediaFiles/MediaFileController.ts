@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Inject, Post } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
-import DownloadMediaFileRequestDto from './Dtos/DownloadMediaFileRequestDto';
-import DownloadMediaFileCommand from 'src/Media/Application/MediaFiles/DownloadMediaFile/DownloadMediaFileCommand';
+import MediaFileDownloadRequestDto from './Dtos/MediaFileDownloadRequestDto';
+import MediaFileDownloadCommand from 'src/Media/Application/MediaFiles/MediaFileDownload/MediaFileDownloadCommand';
 
 @Controller('media-file')
 export default class MediaFileController {
@@ -13,8 +13,8 @@ export default class MediaFileController {
   }
 
   @Post()
-  async addMediaFile(@Body() body: DownloadMediaFileRequestDto) {
-    const command = new DownloadMediaFileCommand(
+  async addMediaFile(@Body() body: MediaFileDownloadRequestDto) {
+    const command = new MediaFileDownloadCommand(
       body.FileName,
       body.MasterDirectory,
       body.URL,

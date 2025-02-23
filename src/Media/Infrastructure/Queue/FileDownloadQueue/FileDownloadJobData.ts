@@ -1,4 +1,4 @@
-export default class DownloadFileJobData {
+export default class FileDownloadJobData {
   constructor(
     public readonly MediaFileName: string,
     public readonly MasterDirectory: string,

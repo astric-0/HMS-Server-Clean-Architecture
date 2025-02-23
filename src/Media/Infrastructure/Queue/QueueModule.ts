@@ -1,8 +1,10 @@
-import { BullModule } from '@nestjs/bullmq';
 import { Module } from '@nestjs/common';
+import { BullModule } from '@nestjs/bullmq';
 
-import DownloadFileQueueService from './DownloadFileQueue/DownloadFileQueueService';
-import DownloadFileProcessor from './DownloadFileQueue/DownloadFileProcessor';
+import FileDownloadQueueService from './FileDownloadQueue/FileDownloadQueueService';
+import FileDownloadProcessor from './FileDownloadQueue/FileDownloadProcessor';
+import ApplicationEventPublisherModule from 'src/Common/Application/ApplicationPublisher/ApplicationEventPublisherModule';
+// import { CqrsModule } from '@nestjs/cqrs';
 
 @Module({
   imports: [
@@ -10,16 +12,23 @@ import DownloadFileProcessor from './DownloadFileQueue/DownloadFileProcessor';
       connection: { host: 'hms-redis', port: 6379 },
     }),
     BullModule.registerQueue({
-      name: DownloadFileQueueService.QueueName,
+      name: FileDownloadQueueService.QueueName,
     }),
+    ApplicationEventPublisherModule,
   ],
   providers: [
-    DownloadFileProcessor,
-    DownloadFileQueueService,
-    { provide: 'IQueueService', useExisting: DownloadFileQueueService },
+    FileDownloadProcessor,
+    FileDownloadQueueService,
+    {
+      provide: FileDownloadQueueService.Token,
+      useExisting: FileDownloadQueueService,
+    },
   ],
   exports: [
-    { provide: 'IQueueService', useExisting: DownloadFileQueueService },
+    {
+      provide: FileDownloadQueueService.Token,
+      useExisting: FileDownloadQueueService,
+    },
   ],
 })
 export default class QueueModule {}

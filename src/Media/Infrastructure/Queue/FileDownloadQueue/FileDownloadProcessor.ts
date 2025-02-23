@@ -1,21 +1,39 @@
 import { Job } from 'bullmq';
 import { Processor, WorkerHost } from '@nestjs/bullmq';
-import { Logger } from '@nestjs/common';
+import { Inject, Logger } from '@nestjs/common';
 import { unlinkSync, createWriteStream, mkdirSync } from 'fs';
 import { dirname } from 'path';
 import * as https from 'https';
 
-import DownloadFileQueueService from './DownloadFileQueueService';
-import DownloadFileJobData from './DownloadFileJobData';
+import FileDownloadQueueService from './FileDownloadQueueService';
+import FileDownloadJobData from './FileDownloadJobData';
+import IApplicationEventPublisher from 'src/Common/Application/Abstractions/ApplicationPublisher/IApplicationEventPublisher';
+import ApplicationEventPublisher from 'src/Common/Application/ApplicationPublisher/ApplicationEventPublisher copy';
+import MediaFileDownloadedEvent from 'src/Media/Application/MediaFiles/MediaFileDownload/MediaFIleDownloadedEvent';
 
-@Processor(DownloadFileQueueService.QueueName, { concurrency: 1 })
-export default class DownloadFileProcessor extends WorkerHost {
-  async process(job: Job): Promise<void> {
+@Processor(FileDownloadQueueService.QueueName, { concurrency: 1 })
+export default class FileDownloadProcessor extends WorkerHost {
+  constructor(
+    @Inject(ApplicationEventPublisher.Token)
+    private readonly eventPublisher: IApplicationEventPublisher,
+  ) {
+    super();
+  }
+
+  async process(job: Job<FileDownloadJobData>): Promise<void> {
     try {
       Logger.log(`JOB STARTED: ${job.name}`);
       Logger.log(`JOB DATA: ${JSON.stringify(job.data)}`);
 
       await this.downloadMedia(job);
+
+      this.eventPublisher.Publish(
+        new MediaFileDownloadedEvent(
+          job.data.MediaFileName,
+          job.data.MasterDirectory,
+          job.data.FullPath,
+        ),
+      );
     } catch (error) {
       Logger.log(error);
     } finally {
@@ -23,7 +41,7 @@ export default class DownloadFileProcessor extends WorkerHost {
     }
   }
 
-  private downloadMedia(job: Job<DownloadFileJobData>): Promise<boolean> {
+  private downloadMedia(job: Job<FileDownloadJobData>): Promise<boolean> {
     return new Promise((resolve, reject) => {
       const { data } = job;
       try {

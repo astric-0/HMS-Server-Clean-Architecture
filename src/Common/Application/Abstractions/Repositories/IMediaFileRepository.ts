@@ -1,4 +1,4 @@
-import MediaFile from './MediaFile';
+import MediaFile from '../../../../Media/Domain/MediaFiles/MediaFile';
 import { UUIDTypes } from 'uuid';
 
 interface IMediaFileRepository {

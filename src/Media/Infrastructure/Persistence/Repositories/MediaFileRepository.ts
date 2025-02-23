@@ -3,13 +3,15 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UUIDTypes } from 'uuid';
 
-import IMediaFileRepository from 'src/Media/Domain/MediaFiles/IMediaFileRepository';
-import MediaFileSchema from '../Schemas/MediaFileSchema';
+import IMediaFileRepository from 'src/Common/Application/Abstractions/Repositories/IMediaFileRepository';
+import IMediaFileRaw from 'src/Common/Application/Abstractions/Repositories/IMediaFileRaw';
 import MediaFile from 'src/Media/Domain/MediaFiles/MediaFile';
-import IMediaFileRaw from 'src/Media/Domain/MediaFiles/IMediaFileRaw';
+import MediaFileSchema from '../Schemas/MediaFileSchema';
 
 @Injectable()
 export default class MediaFileRepository implements IMediaFileRepository {
+  public static readonly Token = Symbol('IMediaFileRepository');
+
   constructor(
     @InjectRepository(MediaFileSchema)
     private readonly repository: Repository<MediaFile>,
