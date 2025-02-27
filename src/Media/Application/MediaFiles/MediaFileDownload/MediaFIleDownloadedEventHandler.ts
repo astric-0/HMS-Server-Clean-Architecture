@@ -10,7 +10,7 @@ import {
   MediaFileMasterDirectory,
   MediaFileName,
   MediaFileSize,
-} from 'src/Media/Domain/MediaFiles/ValueTypes';
+} from 'src/Common/Domain/MediaFiles/ValueTypes';
 
 @EventsHandler(MediaFileDownloadedEvent)
 export default class MediaFileDownloadedEventHandler

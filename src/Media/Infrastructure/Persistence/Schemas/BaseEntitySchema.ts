@@ -1,9 +1,9 @@
-import BaseEntity from 'src/Media/Domain/BaseEntity';
+import { IBaseEntityRaw } from 'src/Media/Domain/BaseEntity';
 import { EntitySchema } from 'typeorm';
 
-const BaseEntitySchema = new EntitySchema<BaseEntity>({
-  target: BaseEntity,
-  name: 'Base',
+const BaseEntitySchema = new EntitySchema<IBaseEntityRaw>({
+  name: 'IBaseEntityRaw',
+  target: IBaseEntityRaw,
   columns: {
     Id: {
       name: 'id',

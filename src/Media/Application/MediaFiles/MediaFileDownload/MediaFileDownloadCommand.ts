@@ -1,5 +1,5 @@
 import { UUIDTypes } from 'uuid';
-import Command from '../../Shared/Messaging/Command';
+import Command from '../../../../Common/Application/Abstractions/Messaging/Command';
 
 export default class DownloadMediaFileCommand extends Command<UUIDTypes> {
   constructor(

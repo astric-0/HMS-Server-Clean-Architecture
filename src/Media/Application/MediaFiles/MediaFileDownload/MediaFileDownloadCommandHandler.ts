@@ -3,10 +3,10 @@ import { CommandHandler } from '@nestjs/cqrs';
 import { Job } from 'bullmq';
 import { Inject } from '@nestjs/common';
 
-import Result from 'src/Media/Domain/Shared/Result';
-import Error, { ErrorType } from 'src/Media/Domain/Shared/Error';
+import Result from 'src/Common/Domain/Result';
+import Error, { ErrorType } from 'src/Common/Domain/Error';
 import DownloadMediaFileCommand from './MediaFileDownloadCommand';
-import ICommandHandler from '../../Shared/Messaging/ICommandHandler';
+import ICommandHandler from '../../../../Common/Application/Abstractions/Messaging/ICommandHandler';
 import IQueueService from '../../../../Common/Application/Abstractions/Queue/IQueueService';
 
 import FileDownloadJobData from 'src/Media/Infrastructure/Queue/FileDownloadQueue/FileDownloadJobData';

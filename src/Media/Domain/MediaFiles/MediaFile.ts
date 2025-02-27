@@ -7,7 +7,7 @@ import {
   MediaFileMasterDirectory,
   MediaFileName,
   MediaFileSize,
-} from './ValueTypes';
+} from '../../../Common/Domain/MediaFiles/ValueTypes';
 
 export default class MediaFile extends BaseEntity implements IMediaFileRaw {
   #name: MediaFileName;
@@ -15,14 +15,14 @@ export default class MediaFile extends BaseEntity implements IMediaFileRaw {
   #fullPath: MediaFileFullPath;
   #size: MediaFileSize;
 
-  static readonly #masterDirectories: string[] = [
+  static readonly _masterDirectories: string[] = [
     'movie',
     'movie_series',
     'series',
   ] as const;
 
   public static get MasterDirectories(): readonly string[] {
-    return Object.freeze(this.#masterDirectories);
+    return Object.freeze(this._masterDirectories);
   }
 
   private constructor(
@@ -57,6 +57,8 @@ export default class MediaFile extends BaseEntity implements IMediaFileRaw {
   }
 
   public static FromRaw(raw: IMediaFileRaw): MediaFile {
+    if (!raw) return null;
+
     const mediaFile: MediaFile = new MediaFile(
       raw.Id,
       raw.Name,

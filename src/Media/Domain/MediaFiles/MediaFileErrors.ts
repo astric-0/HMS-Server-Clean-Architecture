@@ -1,4 +1,4 @@
-import Error, { ErrorType } from '../Shared/Error';
+import Error, { ErrorType } from '../../../Common/Domain/Error';
 
 export default class MediaFileErrors {
   public static readonly NotFound: Error = new Error(

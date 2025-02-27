@@ -1,8 +1,8 @@
 import { UUIDTypes } from 'uuid';
 
 export default abstract class BaseEntity implements IBaseEntityRaw {
-  #id: UUIDTypes;
-  #created: Date;
+  private _id: UUIDTypes;
+  private _created: Date;
 
   protected constructor(id: UUIDTypes) {
     this.Id = id;
@@ -10,23 +10,23 @@ export default abstract class BaseEntity implements IBaseEntityRaw {
   }
 
   public get Id(): string {
-    return this.#id.toString();
+    return this._id.toString();
   }
 
   protected set Id(value: UUIDTypes) {
-    this.#id = value;
+    this._id = value;
   }
 
   public get Created(): Date {
-    return this.#created;
+    return this._created;
   }
 
   protected set Created(value: Date) {
-    this.#created = value;
+    this._created = value;
   }
 }
 
-export interface IBaseEntityRaw {
-  Id: UUIDTypes;
-  Created: Date;
+export abstract class IBaseEntityRaw {
+  abstract Id: UUIDTypes;
+  abstract Created: Date;
 }

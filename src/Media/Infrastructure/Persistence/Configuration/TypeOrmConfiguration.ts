@@ -14,6 +14,7 @@ export default class TypeOrmConfiguration implements TypeOrmOptionsFactory {
       url: this.configService.getOrThrow('DATABASE_URL'),
       autoLoadEntities: true,
       synchronize: false, // process.env.NODE_ENV !== 'production',
+      logging: true,
     };
   }
 }

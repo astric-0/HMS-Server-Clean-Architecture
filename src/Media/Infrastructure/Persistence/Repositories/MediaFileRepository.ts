@@ -14,12 +14,12 @@ export default class MediaFileRepository implements IMediaFileRepository {
 
   constructor(
     @InjectRepository(MediaFileSchema)
-    private readonly repository: Repository<MediaFile>,
+    private readonly repository: Repository<IMediaFileRaw>,
   ) {}
 
   public async GetMediaFileById(id: UUIDTypes): Promise<MediaFile> {
-    const raw: IMediaFileRaw = await this.repository.findOne({
-      where: { Id: id as string },
+    const raw: IMediaFileRaw = await this.repository.findOneBy({
+      Id: id as string,
     });
 
     return MediaFile.FromRaw(raw);

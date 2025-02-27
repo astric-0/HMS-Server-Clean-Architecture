@@ -3,12 +3,12 @@ import {
   MediaFileMasterDirectory,
   MediaFileName,
   MediaFileSize,
-} from '../../../../Media/Domain/MediaFiles/ValueTypes';
+} from '../../../Domain/MediaFiles/ValueTypes';
 import { IBaseEntityRaw } from '../../../../Media/Domain/BaseEntity';
 
-export default interface IMediaFileRaw extends IBaseEntityRaw {
-  Name: MediaFileName;
-  FullPath: MediaFileFullPath;
-  MasterDirectory: MediaFileMasterDirectory;
-  Size: MediaFileSize;
+export default abstract class IMediaFileRaw extends IBaseEntityRaw {
+  abstract Name: MediaFileName;
+  abstract FullPath: MediaFileFullPath;
+  abstract MasterDirectory: MediaFileMasterDirectory;
+  abstract Size: MediaFileSize;
 }

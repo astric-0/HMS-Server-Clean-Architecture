@@ -1,5 +1,5 @@
 import { ICommandHandler as ICommandHandlerNest } from '@nestjs/cqrs';
-import Result from 'src/Media/Domain/Shared/Result';
+import Result from 'src/Common/Domain/Result';
 import Command from './Command';
 
 declare type ICommandHandler<

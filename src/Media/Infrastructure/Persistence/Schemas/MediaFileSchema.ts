@@ -1,18 +1,18 @@
 import { EntitySchema } from 'typeorm';
 
-import MediaFile from 'src/Media/Domain/MediaFiles/MediaFile';
 import {
   MediaFileFullPath,
   MediaFileMasterDirectory,
   MediaFileName,
   MediaFileSize,
-} from 'src/Media/Domain/MediaFiles/ValueTypes';
+} from 'src/Common/Domain/MediaFiles/ValueTypes';
 
 import BaseEntitySchema from './BaseEntitySchema';
+import IMediaFileRaw from 'src/Common/Application/Abstractions/Repositories/IMediaFileRaw';
 
-const MediaFileSchema = new EntitySchema<MediaFile>({
-  name: 'MediaFile',
-  target: MediaFile,
+const MediaFileSchema = new EntitySchema<IMediaFileRaw>({
+  name: 'IMediaFileRaw',
+  target: IMediaFileRaw,
   tableName: 'media_file',
   columns: {
     ...BaseEntitySchema.options.columns,
