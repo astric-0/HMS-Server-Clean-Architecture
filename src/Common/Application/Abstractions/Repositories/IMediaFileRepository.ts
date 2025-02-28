@@ -6,6 +6,8 @@ interface IMediaFileRepository {
 
   Add(mediaFile: MediaFile): Promise<MediaFile>;
 
+  GetMediaFiles(currentPage: number, pageSize: number): Promise<MediaFile[]>;
+
   Remove(id: UUIDTypes): Promise<boolean>;
 }
 

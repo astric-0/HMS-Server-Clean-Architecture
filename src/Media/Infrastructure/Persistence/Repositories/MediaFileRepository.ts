@@ -25,6 +25,20 @@ export default class MediaFileRepository implements IMediaFileRepository {
     return MediaFile.FromRaw(raw);
   }
 
+  public async GetMediaFiles(
+    currentPage: number,
+    pageSize: number,
+  ): Promise<MediaFile[]> {
+    const rawFiles: IMediaFileRaw[] = await this.repository.find({
+      take: pageSize,
+      skip: (currentPage - 1) * pageSize,
+    });
+
+    const mediaFiles: MediaFile[] = rawFiles.map(MediaFile.FromRaw);
+
+    return mediaFiles;
+  }
+
   public async Add(mediaFile: MediaFile): Promise<MediaFile> {
     const raw: IMediaFileRaw = await this.repository.save(mediaFile);
 

@@ -12,6 +12,6 @@ export default class MediaFileGetByIdQuery extends ICachedQuery<MediaFileInfoDto
   }
 
   public get CacheKey(): string {
-    return this.Id.toString();
+    return `MediaFile-GetById-[Id=${this.Id}]`;
   }
 }
