@@ -1,4 +1,4 @@
-import { IBaseEntityRaw } from 'src/Media/Domain/BaseEntity';
+/*import { IBaseEntityRaw } from 'src/Common/Application/Abstractions/Repositories/BaseEntity';
 import { EntitySchema } from 'typeorm';
 
 const BaseEntitySchema = new EntitySchema<IBaseEntityRaw>({
@@ -18,3 +18,4 @@ const BaseEntitySchema = new EntitySchema<IBaseEntityRaw>({
 });
 
 export default BaseEntitySchema;
+*/

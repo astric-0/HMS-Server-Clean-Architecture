@@ -1,17 +1,17 @@
 import { UUIDTypes, v4 as uuidv4 } from 'uuid';
 
-import IMediaFileRaw from '../../../Common/Application/Abstractions/Repositories/IMediaFileRaw';
-import BaseEntity from '../BaseEntity';
+import IMediaFileRaw from 'src/Common/Application/Abstractions/Repositories/MediaFile/IMediaFileRaw';
+import BaseEntity from 'src/Common/Application/Abstractions/Repositories/BaseEntity';
 import {
   MediaFileFullPath,
-  MediaFileMasterDirectory,
   MediaFileName,
   MediaFileSize,
-} from '../../../Common/Domain/MediaFiles/ValueTypes';
+} from 'src/Common/Domain/MediaFiles/ValueTypes';
+import MediaDirectory from '../MediaDirectories/MediaDirectory';
 
 export default class MediaFile extends BaseEntity implements IMediaFileRaw {
   #name: MediaFileName;
-  #masterDirectory: MediaFileMasterDirectory;
+  #mediaDirectory: MediaDirectory;
   #fullPath: MediaFileFullPath;
   #size: MediaFileSize;
 
@@ -28,27 +28,27 @@ export default class MediaFile extends BaseEntity implements IMediaFileRaw {
   private constructor(
     id: UUIDTypes,
     fileName: MediaFileName,
-    masterDirectory: MediaFileMasterDirectory,
+    mediaDirectory: MediaDirectory,
     size: MediaFileSize,
     fullPath: MediaFileFullPath,
   ) {
     super(id);
     this.#name = fileName;
-    this.#masterDirectory = masterDirectory;
+    this.#mediaDirectory = mediaDirectory;
     this.#size = size;
     this.#fullPath = fullPath;
   }
 
   public static Create(
     fileName: MediaFileName,
-    masterDirectory: MediaFileMasterDirectory,
+    mediaDirectory: MediaDirectory,
     size: MediaFileSize,
     fullPath: MediaFileFullPath,
   ): MediaFile {
     const mediaFile = new MediaFile(
       uuidv4(),
       fileName,
-      masterDirectory,
+      mediaDirectory,
       size,
       fullPath,
     );
@@ -62,7 +62,7 @@ export default class MediaFile extends BaseEntity implements IMediaFileRaw {
     const mediaFile: MediaFile = new MediaFile(
       raw.Id,
       raw.Name,
-      raw.MasterDirectory,
+      MediaDirectory.FromRaw(raw.MediaDirectory),
       raw.Size,
       raw.FullPath,
     );
@@ -80,8 +80,8 @@ export default class MediaFile extends BaseEntity implements IMediaFileRaw {
     return this.#fullPath;
   }
 
-  public get MasterDirectory(): MediaFileFullPath {
-    return this.#masterDirectory;
+  public get MediaDirectory(): MediaDirectory {
+    return this.#mediaDirectory;
   }
 
   public get Size(): MediaFileSize {

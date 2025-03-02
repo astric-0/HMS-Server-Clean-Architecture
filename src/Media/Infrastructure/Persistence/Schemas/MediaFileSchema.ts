@@ -1,14 +1,15 @@
+/*
 import { EntitySchema } from 'typeorm';
 
 import {
   MediaFileFullPath,
-  MediaFileMasterDirectory,
   MediaFileName,
   MediaFileSize,
 } from 'src/Common/Domain/MediaFiles/ValueTypes';
+import IMediaFileRaw from 'src/Common/Application/Abstractions/Repositories/MediaFile/IMediaFileRaw';
 
 import BaseEntitySchema from './BaseEntitySchema';
-import IMediaFileRaw from 'src/Common/Application/Abstractions/Repositories/IMediaFileRaw';
+import IMediaDirectoryRaw from 'src/Common/Application/Abstractions/Repositories/MediaDirectory/IMediaDirectoryRaw';
 
 const MediaFileSchema = new EntitySchema<IMediaFileRaw>({
   name: 'IMediaFileRaw',
@@ -22,16 +23,6 @@ const MediaFileSchema = new EntitySchema<IMediaFileRaw>({
       transformer: {
         from: (value: string): MediaFileName => new MediaFileName(value),
         to: (mediaFileName: MediaFileName): string => mediaFileName.Value,
-      },
-    },
-    MasterDirectory: {
-      name: 'master_directory',
-      type: 'varchar',
-      transformer: {
-        from: (value: string): MediaFileMasterDirectory =>
-          new MediaFileMasterDirectory(value),
-        to: (mediaFileMasterDirectory: MediaFileMasterDirectory): string =>
-          mediaFileMasterDirectory.Value,
       },
     },
     FullPath: {
@@ -53,6 +44,16 @@ const MediaFileSchema = new EntitySchema<IMediaFileRaw>({
       },
     },
   },
+  relations: {
+    MediaDirectory: {
+      type: 'many-to-one',
+      joinColumn: { name: 'media_directory_id' },
+      cascade: true,
+      target: IMediaDirectoryRaw,
+      inverseSide: 'MediaFiles',
+    },
+  },
 });
 
 export default MediaFileSchema;
+*/

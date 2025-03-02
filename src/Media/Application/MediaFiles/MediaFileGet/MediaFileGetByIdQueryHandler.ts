@@ -33,7 +33,7 @@ export default class MediaFileGetByIdQueryHandler extends CachedQueryHandler<
     const value = new MediaFileInfoDto(
       mediaFile.Id,
       mediaFile.Name.Value,
-      mediaFile.MasterDirectory.Value,
+      mediaFile.MediaDirectory.Name.Value,
       mediaFile.Size.Value,
       mediaFile.Created,
     );

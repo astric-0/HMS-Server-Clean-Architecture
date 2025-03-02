@@ -25,6 +25,14 @@ export default class Error {
     ),
   );
 
+  public static readonly NotFound: Readonly<Error> = Object.freeze(
+    new Error(
+      'Generic.NotFound',
+      "Couldn n't find the given record",
+      ErrorType.NotFound,
+    ),
+  );
+
   public static readonly InValidValue: Readonly<Error> = Object.freeze(
     new Error(
       'Generic.InValidValue',

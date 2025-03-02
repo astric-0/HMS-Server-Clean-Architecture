@@ -6,7 +6,6 @@ export default class Result<TValue = void> {
   #value: TValue;
 
   constructor(isSuccess: boolean, error: Error, value: TValue | null) {
-    console.log({ 'in constructor': value });
     this.#isSuccess = isSuccess;
     this.#error = error;
     this.#value = value;

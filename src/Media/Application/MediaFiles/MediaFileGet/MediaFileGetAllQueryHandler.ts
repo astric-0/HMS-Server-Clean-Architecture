@@ -4,7 +4,7 @@ import { QueryHandler } from '@nestjs/cqrs';
 
 import Result from 'src/Common/Domain/Result';
 import CachedQueryHandler from 'src/Common/Application/Abstractions/Messaging/CachedQueryHandler';
-import IMediaFileRepository from 'src/Common/Application/Abstractions/Repositories/IMediaFileRepository';
+import IMediaFileRepository from 'src/Common/Application/Abstractions/Repositories/MediaFile/IMediaFileRepository';
 
 import MediaFile from 'src/Media/Domain/MediaFiles/MediaFile';
 import MediaFileRepository from 'src/Media/Infrastructure/Persistence/Repositories/MediaFileRepository';
@@ -18,7 +18,7 @@ export default class MediaFileGetAllQueryHandler extends CachedQueryHandler<
 > {
   constructor(
     @Inject(MediaFileRepository.Token)
-    private mediaFileRepository: IMediaFileRepository,
+    private mediaFileRepository: IMediaFileRepository<MediaFile>,
     @Inject(CACHE_MANAGER)
     cacheManager: Cache,
   ) {
@@ -39,7 +39,7 @@ export default class MediaFileGetAllQueryHandler extends CachedQueryHandler<
         const info: MediaFileInfoDto = {
           Id: fileInfo.Id,
           FileName: fileInfo.Name.Value,
-          MasterDirectory: fileInfo.MasterDirectory.Value,
+          MediaDirectory: fileInfo.MediaDirectory?.Name?.Value,
           Size: fileInfo.Size.Value,
           Created: fileInfo.Created,
         };

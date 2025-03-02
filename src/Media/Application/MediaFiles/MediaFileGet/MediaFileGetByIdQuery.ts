@@ -1,8 +1,8 @@
 import { UUIDTypes } from 'uuid';
-import ICachedQuery from 'src/Common/Application/Abstractions/Messaging/CachedQuery';
+import CachedQuery from 'src/Common/Application/Abstractions/Messaging/CachedQuery';
 import MediaFileInfoDto from './MediaFileInfoDto';
 
-export default class MediaFileGetByIdQuery extends ICachedQuery<MediaFileInfoDto> {
+export default class MediaFileGetByIdQuery extends CachedQuery<MediaFileInfoDto> {
   constructor(public readonly Id: UUIDTypes) {
     super();
   }
