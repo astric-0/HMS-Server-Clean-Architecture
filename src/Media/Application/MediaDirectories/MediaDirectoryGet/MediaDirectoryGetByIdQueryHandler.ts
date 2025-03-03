@@ -16,7 +16,7 @@ import MediaFile from 'src/Media/Domain/MediaFiles/MediaFile';
 import MediaFileInfoDto from '../../MediaFiles/MediaFileGet/MediaFileInfoDto';
 
 @QueryHandler(MediaDirectoryGetByIdQuery)
-export class MediaDirectoryGetByIdQueryHandler extends CachedQueryHandler<
+export default class MediaDirectoryGetByIdQueryHandler extends CachedQueryHandler<
   MediaDirectoryGetByIdQuery,
   MediaDirectoryInfoDto
 > {
@@ -27,6 +27,21 @@ export class MediaDirectoryGetByIdQueryHandler extends CachedQueryHandler<
     cacheManager: Cache,
   ) {
     super(cacheManager);
+  }
+
+  async executeCached(
+    query: MediaDirectoryGetByIdQuery,
+  ): Promise<Result<MediaDirectoryInfoDto>> {
+    const mediaDirectory: MediaDirectory =
+      await this.mediaFileRepository.GetById(query.Id);
+
+    if (!mediaDirectory) return Result.Failure(MediaDirectoryErrors.NotFound);
+
+    return Result.Success(
+      MediaDirectoryGetByIdQueryHandler.MapMediaDirectoryInfoToDto(
+        mediaDirectory,
+      ),
+    );
   }
 
   static MapMediaDirectoryInfoToDto(
@@ -41,33 +56,18 @@ export class MediaDirectoryGetByIdQueryHandler extends CachedQueryHandler<
       MediaDirectoryGetByIdQueryHandler.MapMediaDirectoryInfoToDto(
         mediaDirectory.Parent,
       ),
-      mediaDirectory.Children.map(
+      mediaDirectory.Children?.map(
         MediaDirectoryGetByIdQueryHandler.MapMediaDirectoryInfoToDto,
       ),
-      mediaDirectory.MediaFiles.map(
+      mediaDirectory.MediaFiles?.map(
         (value: MediaFile): MediaFileInfoDto =>
           new MediaFileInfoDto(
             value.Id,
             value.Name.Value,
-            value.MediaDirectory.Name.Value,
+            value?.MediaDirectory?.Name?.Value,
             value.Size.Value,
             value.Created,
           ),
-      ),
-    );
-  }
-
-  async executeCached(
-    query: MediaDirectoryGetByIdQuery,
-  ): Promise<Result<MediaDirectoryInfoDto>> {
-    const mediaDirectory: MediaDirectory =
-      await this.mediaFileRepository.GetById(query.Id);
-
-    if (!mediaDirectory) return Result.Failure(MediaDirectoryErrors.NotFound);
-
-    return Result.Success(
-      MediaDirectoryGetByIdQueryHandler.MapMediaDirectoryInfoToDto(
-        mediaDirectory,
       ),
     );
   }

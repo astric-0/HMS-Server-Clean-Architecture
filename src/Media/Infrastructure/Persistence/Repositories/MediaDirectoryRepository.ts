@@ -22,11 +22,21 @@ export default class MediaDirectoryRepository
     private readonly repository: Repository<IMediaDirectoryRaw>,
   ) {}
 
+  async CheckExistsById(id: UUIDTypes): Promise<boolean> {
+    const result = await this.repository.query(
+      'SELECT 1 FROM media_directory WHERE id = $1',
+      [id as string],
+    );
+
+    return !!result.length;
+  }
+
   async GetByIds(ids: UUIDTypes[]): Promise<MediaDirectory[]> {
     if (!ids || !ids.length) return [];
 
     const mediaDirectories: IMediaDirectoryRaw[] = await this.repository.find({
       where: { Id: In(ids as string[]) },
+      //relations: ['MediaFiles', 'Children', 'Parent'],
     });
 
     return mediaDirectories.map(MediaDirectory.FromRaw);
@@ -62,7 +72,7 @@ export default class MediaDirectoryRepository
       where: {
         Id: id as string,
       },
-      relations: ['Children', 'MediaFiles'],
+      relations: ['Children', 'MediaFiles', 'Parent'],
     });
 
     return MediaDirectory.FromRaw(raw);

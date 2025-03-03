@@ -10,18 +10,17 @@ import IQueueService from 'src/Common/Application/Abstractions/Queue/IQueueServi
 import IMediaDirectoryRepository from 'src/Common/Application/Abstractions/Repositories/MediaDirectory/IMediaDirectoryRepository';
 
 import MediaDirectory from 'src/Media/Domain/MediaDirectories/MediaDirectory';
+import MediaDirectoryErrors from 'src/Media/Domain/MediaDirectories/MediaDirectoryErrors';
 
 import FileDownloadJobData from 'src/Media/Infrastructure/Queue/FileDownloadQueue/FileDownloadJobData';
 import FileDownloadQueueService from 'src/Media/Infrastructure/Queue/FileDownloadQueue/FileDownloadQueueService';
 import MediaDirectoryRepository from 'src/Media/Infrastructure/Persistence/Repositories/MediaDirectoryRepository';
 
-import DownloadMediaFileCommand from './MediaFileDownloadCommand';
-import { MediaDirectoryName } from 'src/Common/Domain/MediaDirectory/ValueTypes';
-import MediaDirectoryErrors from 'src/Media/Domain/MediaDirectories/MediaDirectoryErrors';
+import MediaFileDownloadCommand from './MediaFileDownloadCommand';
 
-@CommandHandler(DownloadMediaFileCommand)
+@CommandHandler(MediaFileDownloadCommand)
 export default class DownloadMediaFileCommandHandler
-  implements ICommandHandler<DownloadMediaFileCommand, UUIDTypes>
+  implements ICommandHandler<MediaFileDownloadCommand, UUIDTypes>
 {
   constructor(
     @Inject(FileDownloadQueueService.Token)
@@ -35,18 +34,17 @@ export default class DownloadMediaFileCommandHandler
   }
 
   public async execute(
-    command: DownloadMediaFileCommand,
+    command: MediaFileDownloadCommand,
   ): Promise<Result<UUIDTypes>> {
-    const exists: boolean =
-      await this.mediaDirectoryRepository.CheckMasterDirectoryExistsByName(
-        new MediaDirectoryName(command.MasterDirectory),
-      );
+    const exists: boolean = await this.mediaDirectoryRepository.CheckExistsById(
+      command.MediaDirectoryId,
+    );
 
     if (!exists) return Result.Failure(MediaDirectoryErrors.NotFound);
 
     const data: FileDownloadJobData = new FileDownloadJobData(
       command.MediaFileName,
-      command.MasterDirectory,
+      command.MediaDirectoryId as string,
       command.URL,
       DownloadMediaFileCommandHandler.DownloadPath + command.MediaFileName,
     );

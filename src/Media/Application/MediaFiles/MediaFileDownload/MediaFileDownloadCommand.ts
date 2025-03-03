@@ -1,10 +1,10 @@
 import { UUIDTypes } from 'uuid';
-import Command from '../../../../Common/Application/Abstractions/Messaging/Command';
+import Command from 'src/Common/Application/Abstractions/Messaging/Command';
 
-export default class DownloadMediaFileCommand extends Command<UUIDTypes> {
+export default class MediaFileDownloadCommand extends Command<UUIDTypes> {
   constructor(
     public readonly MediaFileName: string,
-    public readonly MasterDirectory: string,
+    public readonly MediaDirectoryId: UUIDTypes,
     public readonly URL: string,
   ) {
     super();

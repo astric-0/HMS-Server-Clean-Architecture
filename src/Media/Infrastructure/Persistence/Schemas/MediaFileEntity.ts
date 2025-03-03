@@ -24,17 +24,28 @@ export default class MediaFileEntity implements IMediaFileRaw {
   @Column({ type: 'timestamp', name: 'created' })
   Created: Date;
 
-  @Column({ name: 'name', type: 'varchar' })
+  @Column({
+    name: 'name',
+    type: 'varchar',
+    transformer: {
+      from(value: string): MediaFileName {
+        return new MediaFileName(value);
+      },
+      to(mediaFileName: MediaFileName): string {
+        return mediaFileName.Value;
+      },
+    },
+  })
   Name: MediaFileName;
 
   @Column({
     name: 'full_path',
     type: 'varchar',
     transformer: {
-      from(value: string) {
+      from(value: string): MediaFileFullPath {
         return new MediaFileFullPath(value);
       },
-      to(fullPath: MediaFileFullPath) {
+      to(fullPath: MediaFileFullPath): string {
         return fullPath.Value;
       },
     },
@@ -44,11 +55,21 @@ export default class MediaFileEntity implements IMediaFileRaw {
   @ManyToOne(
     () => MediaDirectoryEntity,
     (mediaDirectory) => mediaDirectory.MediaFiles,
-    { cascade: true },
   )
   @JoinColumn({ name: 'media_directory_id' })
   MediaDirectory: MediaDirectoryEntity;
 
-  @Column({ name: 'size', type: 'float' })
+  @Column({
+    name: 'size',
+    type: 'float',
+    transformer: {
+      from(value: number): MediaFileSize {
+        return new MediaFileSize(value);
+      },
+      to(size: MediaFileSize): number {
+        return size.Value;
+      },
+    },
+  })
   Size: MediaFileSize;
 }

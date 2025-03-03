@@ -9,7 +9,9 @@ import MediaFileDownloadCommandHandler from './MediaFiles/MediaFileDownload/Medi
 import MediaFileDownloadedEventHandler from './MediaFiles/MediaFileDownload/MediaFIleDownloadedEventHandler';
 import MediaFileGetByIdQueryHandler from './MediaFiles/MediaFileGet/MediaFileGetByIdQueryHandler';
 import MediaFileGetAllQueryHandler from './MediaFiles/MediaFileGet/MediaFileGetAllQueryHandler';
+
 import MediaDirectoryCreateCommandHandler from './MediaDirectories/MediaDirectoryCreate/MediaDirectoryCreateCommandHandler';
+import MediaDirectoryGetByIdQueryHandler from './MediaDirectories/MediaDirectoryGet/MediaDirectoryGetByIdQueryHandler';
 
 @Module({
   imports: [QueueModule, PersistenceModule, CqrsModule, CacheModule.register()],
@@ -19,6 +21,7 @@ import MediaDirectoryCreateCommandHandler from './MediaDirectories/MediaDirector
     MediaFileGetByIdQueryHandler,
     MediaFileGetAllQueryHandler,
     MediaDirectoryCreateCommandHandler,
+    MediaDirectoryGetByIdQueryHandler,
   ],
 })
 export default class ApplicationModule {}

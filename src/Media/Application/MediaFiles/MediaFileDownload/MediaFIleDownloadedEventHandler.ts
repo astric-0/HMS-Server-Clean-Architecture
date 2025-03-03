@@ -1,5 +1,6 @@
 import { IEventHandler, EventsHandler } from '@nestjs/cqrs';
 import { Inject } from '@nestjs/common';
+
 import {
   MediaFileFullPath,
   MediaFileName,
@@ -7,7 +8,6 @@ import {
 } from 'src/Common/Domain/MediaFiles/ValueTypes';
 import IMediaFileRepository from 'src/Common/Application/Abstractions/Repositories/MediaFile/IMediaFileRepository';
 import IMediaDirectoryRepository from 'src/Common/Application/Abstractions/Repositories/MediaDirectory/IMediaDirectoryRepository';
-import { MediaDirectoryName } from 'src/Common/Domain/MediaDirectory/ValueTypes';
 
 import MediaFile from 'src/Media/Domain/MediaFiles/MediaFile';
 import MediaDirectory from 'src/Media/Domain/MediaDirectories/MediaDirectory';
@@ -29,14 +29,8 @@ export default class MediaFileDownloadedEventHandler
   ) {}
 
   async handle(event: MediaFileDownloadedEvent) {
-    const mediaDirectoryName: MediaDirectoryName = new MediaDirectoryName(
-      event.MediaFileMasterDirectory,
-    );
-
     const mediaDirectory: MediaDirectory =
-      await this.mediaDirectoryRepository.GetMasterDirectoryByName(
-        mediaDirectoryName,
-      );
+      await this.mediaDirectoryRepository.GetById(event.MediaDirectoryId);
 
     const mediaFile: MediaFile = MediaFile.Create(
       new MediaFileName(event.MediaFileName),

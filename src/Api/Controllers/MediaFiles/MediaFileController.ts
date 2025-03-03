@@ -52,7 +52,7 @@ export default class MediaFileController {
   async addMediaFile(@Body() body: MediaFileDownloadDto) {
     const command = new MediaFileDownloadCommand(
       body.FileName,
-      body.MasterDirectory,
+      body.MediaDirectoryId,
       body.URL,
     );
 

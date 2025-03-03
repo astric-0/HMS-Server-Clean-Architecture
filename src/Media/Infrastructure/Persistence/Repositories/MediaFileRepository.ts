@@ -32,8 +32,9 @@ export default class MediaFileRepository
   }
 
   public async GetMediaFileById(id: UUIDTypes): Promise<MediaFile> {
-    const raw: IMediaFileRaw = await this.repository.findOneBy({
-      Id: id as string,
+    const raw: IMediaFileRaw = await this.repository.findOne({
+      where: { Id: id as string },
+      relations: ['MediaDirectory'],
     });
 
     return MediaFile.FromRaw(raw);

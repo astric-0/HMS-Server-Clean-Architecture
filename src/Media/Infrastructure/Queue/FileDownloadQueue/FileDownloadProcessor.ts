@@ -30,7 +30,7 @@ export default class FileDownloadProcessor extends WorkerHost {
       this.eventPublisher.Publish(
         new MediaFileDownloadedEvent(
           job.data.MediaFileName,
-          job.data.MasterDirectory,
+          job.data.MediaDirectoryId,
           job.data.FullPath,
           totalSize,
         ),
