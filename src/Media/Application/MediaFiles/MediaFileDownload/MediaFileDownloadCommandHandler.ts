@@ -17,6 +17,7 @@ import FileDownloadQueueService from 'src/Media/Infrastructure/Queue/FileDownloa
 import MediaDirectoryRepository from 'src/Media/Infrastructure/Persistence/Repositories/MediaDirectoryRepository';
 
 import MediaFileDownloadCommand from './MediaFileDownloadCommand';
+import { ConfigService } from '@nestjs/config';
 
 @CommandHandler(MediaFileDownloadCommand)
 export default class DownloadMediaFileCommandHandler
@@ -27,31 +28,33 @@ export default class DownloadMediaFileCommandHandler
     private readonly fileDownloadQueueService: IQueueService<FileDownloadJobData>,
     @Inject(MediaDirectoryRepository.Token)
     private readonly mediaDirectoryRepository: IMediaDirectoryRepository<MediaDirectory>,
+    @Inject() private readonly configService: ConfigService,
   ) {}
 
-  private static get DownloadPath() {
-    return './downloads/';
+  private get BaseMediaPath() {
+    return this.configService.getOrThrow('BASE_MEDIA_DIR');
   }
 
   public async execute(
     command: MediaFileDownloadCommand,
   ): Promise<Result<UUIDTypes>> {
-    const exists: boolean = await this.mediaDirectoryRepository.CheckExistsById(
-      command.MediaDirectoryId,
-    );
+    const mediaDirectory: MediaDirectory =
+      await this.mediaDirectoryRepository.GetById(command.MediaDirectoryId);
 
-    if (!exists) return Result.Failure(MediaDirectoryErrors.NotFound);
+    if (!mediaDirectory?.Id)
+      return Result.Failure(MediaDirectoryErrors.NotFound);
 
     const data: FileDownloadJobData = new FileDownloadJobData(
       command.MediaFileName,
       command.MediaDirectoryId as string,
       command.URL,
-      DownloadMediaFileCommandHandler.DownloadPath + command.MediaFileName,
+      `${this.BaseMediaPath}/${mediaDirectory.FullPath}/${command.MediaFileName}`,
     );
 
     try {
       const job: Job<FileDownloadJobData> =
         await this.fileDownloadQueueService.AddToQueue(data);
+
       return Result.Success(job.id);
     } catch (error) {
       return Result.Failure(

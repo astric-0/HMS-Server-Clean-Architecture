@@ -43,14 +43,15 @@ export default class MediaFile extends BaseEntity implements IMediaFileRaw {
     fileName: MediaFileName,
     mediaDirectory: MediaDirectory,
     size: MediaFileSize,
-    fullPath: MediaFileFullPath,
   ): MediaFile {
     const mediaFile = new MediaFile(
       uuidv4(),
       fileName,
       mediaDirectory,
       size,
-      fullPath,
+      new MediaFileFullPath(
+        `${mediaDirectory.FullPath ?? './'}/${fileName.Value}`,
+      ),
     );
 
     return mediaFile;

@@ -2,7 +2,6 @@ import { IEventHandler, EventsHandler } from '@nestjs/cqrs';
 import { Inject } from '@nestjs/common';
 
 import {
-  MediaFileFullPath,
   MediaFileName,
   MediaFileSize,
 } from 'src/Common/Domain/MediaFiles/ValueTypes';
@@ -36,7 +35,6 @@ export default class MediaFileDownloadedEventHandler
       new MediaFileName(event.MediaFileName),
       mediaDirectory,
       new MediaFileSize(event.MediaFileSize),
-      new MediaFileFullPath(event.MediaFileFullPath),
     );
 
     await this.mediaFileRepository.Add(mediaFile);

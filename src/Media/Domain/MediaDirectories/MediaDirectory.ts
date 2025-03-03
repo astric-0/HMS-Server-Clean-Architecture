@@ -7,6 +7,7 @@ import { MediaDirectoryName } from 'src/Common/Domain/MediaDirectory/ValueTypes'
 import MediaFile from '../MediaFiles/MediaFile';
 import Result from 'src/Common/Domain/Result';
 import Error from 'src/Common/Domain/Error';
+import MediaDirectoryFullPath from 'src/Common/Domain/MediaDirectory/ValueTypes/MediaDirectoryFullPath';
 
 export default class MediaDirectory
   extends BaseEntity
@@ -16,6 +17,7 @@ export default class MediaDirectory
   #parent: MediaDirectory;
   #children: MediaDirectory[];
   #mediaFiles: MediaFile[];
+  #fullPath: MediaDirectoryFullPath;
 
   private constructor(
     id: UUIDTypes,
@@ -23,12 +25,14 @@ export default class MediaDirectory
     parent: MediaDirectory,
     children: MediaDirectory[],
     mediaFiles: MediaFile[],
+    fullPath: MediaDirectoryFullPath,
   ) {
     super(id);
     this.#name = name;
     this.#parent = parent;
     this.#children = children;
     this.#mediaFiles = mediaFiles;
+    this.#fullPath = fullPath;
   }
 
   public static Create(
@@ -43,6 +47,7 @@ export default class MediaDirectory
       parent,
       children,
       mediaFiles,
+      new MediaDirectoryFullPath(`${parent?.FullPath ?? '.'}/${name.Value}`),
     );
 
     return mediaDirectory;
@@ -62,6 +67,10 @@ export default class MediaDirectory
 
   public get MediaFiles(): MediaFile[] {
     return this.#mediaFiles;
+  }
+
+  public get FullPath(): MediaDirectoryFullPath {
+    return this.#fullPath;
   }
 
   public LinkMediaFile(mediaFile: MediaFile): Result<void> {
@@ -101,6 +110,7 @@ export default class MediaDirectory
       MediaDirectory.FromRaw(raw.Parent),
       raw.Children?.map(MediaDirectory.FromRaw),
       raw.MediaFiles?.map(MediaFile.FromRaw),
+      raw.FullPath,
     );
 
     mediaDirectory.Created = raw.Created;
