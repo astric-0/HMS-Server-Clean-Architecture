@@ -19,16 +19,14 @@ export default abstract class CachedQueryHandler<
   abstract executeCached(query: TCachedQuery): Promise<Result<TResponse>>;
 
   async execute(query: TCachedQuery): Promise<Result<TResponse>> {
-    const cached: Result<TResponse> = await this.cacheManager.get(
-      query.CacheKey,
-    );
+    const cached: TResponse = await this.cacheManager.get(query.CacheKey);
 
-    if (cached) return cached;
+    if (cached) return Result.Success(cached);
 
     const result = await this.executeCached(query);
 
     if (result.IsSuccess)
-      await this.cacheManager.set(query.CacheKey, result, query.Ttl);
+      await this.cacheManager.set(query.CacheKey, result.Value, query.Ttl);
 
     return result;
   }

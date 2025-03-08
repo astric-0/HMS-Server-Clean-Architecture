@@ -9,6 +9,8 @@ import MediaFileGetByIdQuery from './MediaFileGetByIdQuery';
 import MediaFileInfoDto from './MediaFileInfoDto';
 import MediaFileRepository from 'src/Media/Infrastructure/Persistence/Repositories/MediaFileRepository';
 import MediaFileErrors from 'src/Media/Domain/MediaFiles/MediaFileErrors';
+import MediaFile from 'src/Media/Domain/MediaFiles/MediaFile';
+import IMediaFileRepository from 'src/Common/Application/Abstractions/Repositories/MediaFile/IMediaFileRepository';
 
 @QueryHandler(MediaFileGetByIdQuery)
 export default class MediaFileGetByIdQueryHandler extends CachedQueryHandler<
@@ -17,7 +19,7 @@ export default class MediaFileGetByIdQueryHandler extends CachedQueryHandler<
 > {
   constructor(
     @Inject(MediaFileRepository.Token)
-    private readonly mediaFileRepository: MediaFileRepository,
+    private readonly mediaFileRepository: IMediaFileRepository<MediaFile>,
     @Inject(CACHE_MANAGER) cacheManager: Cache,
   ) {
     super(cacheManager);
@@ -27,7 +29,7 @@ export default class MediaFileGetByIdQueryHandler extends CachedQueryHandler<
     query: MediaFileGetByIdQuery,
   ): Promise<Result<MediaFileInfoDto>> {
     const mediaFile = await this.mediaFileRepository.GetMediaFileById(query.Id);
-    console.log({ mediaFile });
+
     if (!mediaFile) return Result.Failure(MediaFileErrors.NotFound);
 
     const value = new MediaFileInfoDto(

@@ -2,12 +2,13 @@ import { Job } from 'bullmq';
 import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { Inject, Logger } from '@nestjs/common';
 import { unlinkSync, createWriteStream, mkdirSync } from 'fs';
-import { dirname } from 'path';
+import { dirname, join } from 'path';
 import * as https from 'https';
 import * as extractFrame from 'ffmpeg-extract-frame';
 
 import IApplicationEventPublisher from 'src/Common/Application/Abstractions/ApplicationPublisher/IApplicationEventPublisher';
 import ApplicationEventPublisher from 'src/Common/Application/ApplicationPublisher/ApplicationEventPublisher';
+
 import MediaFileDownloadedEvent from 'src/Media/Application/MediaFiles/MediaFileDownload/MediaFIleDownloadedEvent';
 
 import FileDownloadQueueService from './FileDownloadQueueService';
@@ -27,18 +28,32 @@ export default class FileDownloadProcessor extends WorkerHost {
       Logger.log(`JOB STARTED: ${job.name}`);
       Logger.log(`JOB DATA: ${JSON.stringify(job.data)}`);
 
-      const totalSize = await FileDownloadProcessor.DownloadMedia(job);
+      const mediaFileFullPath: string = join(
+        job.data.MediaFilePath,
+        job.data.MediaFileName,
+      );
+
+      const thumbnailFileFullPath: string = join(
+        job.data.MediaThumbnailFilePath,
+        job.data.ThumbnailFileName,
+      );
+
+      const totalSize = await FileDownloadProcessor.DownloadMedia(
+        job,
+        mediaFileFullPath,
+      );
+
       await FileDownloadProcessor.CreateThumbnail(
-        job.data.MediaFileFullPath,
-        job.data.MediaThumbnailFileFullPath,
+        mediaFileFullPath,
+        thumbnailFileFullPath,
       );
 
       this.eventPublisher.Publish(
         new MediaFileDownloadedEvent(
           job.data.MediaFileName,
           job.data.MediaDirectoryId,
-          job.data.MediaFileFullPath,
-          job.data.MediaThumbnailFileFullPath,
+          mediaFileFullPath,
+          thumbnailFileFullPath,
           totalSize,
         ),
       );
@@ -49,18 +64,21 @@ export default class FileDownloadProcessor extends WorkerHost {
     }
   }
 
-  private static DownloadMedia(job: Job<FileDownloadJobData>): Promise<number> {
+  private static DownloadMedia(
+    job: Job<FileDownloadJobData>,
+    mediaFileFullPath: string,
+  ): Promise<number> {
     return new Promise((resolve, reject) => {
       const { data } = job;
       try {
-        mkdirSync(dirname(data.MediaFileFullPath), { recursive: true });
+        mkdirSync(dirname(mediaFileFullPath), { recursive: true });
       } catch (error) {
         return reject(
-          `Failed to create directories for ${data.MediaFileFullPath}: ${error}`,
+          `Failed to create directories for ${mediaFileFullPath}: ${error}`,
         );
       }
 
-      const fileStream = createWriteStream(data.MediaFileFullPath);
+      const fileStream = createWriteStream(mediaFileFullPath);
       let downloadedBytes = 0;
 
       const request = https.get(data.URL, (response) => {
@@ -84,19 +102,19 @@ export default class FileDownloadProcessor extends WorkerHost {
 
         response.on('error', (error) => {
           fileStream.close();
-          unlinkSync(data.MediaFileFullPath);
+          unlinkSync(mediaFileFullPath);
           reject(error);
         });
       });
 
       request.on('error', (error) => {
         fileStream.close();
-        unlinkSync(data.MediaFileFullPath);
+        unlinkSync(mediaFileFullPath);
         reject(error);
       });
 
       fileStream.on('error', (error) => {
-        unlinkSync(data.MediaFileFullPath);
+        unlinkSync(mediaFileFullPath);
         reject(error);
       });
     });

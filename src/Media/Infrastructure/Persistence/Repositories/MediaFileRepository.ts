@@ -5,6 +5,7 @@ import { UUIDTypes } from 'uuid';
 
 import IMediaFileRepository from 'src/Common/Application/Abstractions/Repositories/MediaFile/IMediaFileRepository';
 import IMediaFileRaw from 'src/Common/Application/Abstractions/Repositories/MediaFile/IMediaFileRaw';
+import { MediaFileFullPath } from 'src/Common/Domain/MediaFiles/ValueTypes';
 
 import MediaFile from 'src/Media/Domain/MediaFiles/MediaFile';
 
@@ -20,6 +21,18 @@ export default class MediaFileRepository
     @InjectRepository(MediaFileEntity)
     private readonly repository: Repository<IMediaFileRaw>,
   ) {}
+
+  async GetFullPathById(id: UUIDTypes): Promise<MediaFileFullPath> {
+    const result = await this.repository.query(
+      'SELECT full_path FROM media_file WHERE id = $1 LIMIT 1',
+      [id as string],
+    );
+
+    const fullPath: string = result?.[0]?.full_path;
+    if (!fullPath) return null;
+
+    return new MediaFileFullPath(fullPath);
+  }
 
   async GetMediaFilesByIds(ids: UUIDTypes[]): Promise<MediaFile[]> {
     if (!ids || !ids.length) return [];

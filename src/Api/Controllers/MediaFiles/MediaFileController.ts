@@ -6,13 +6,21 @@ import {
   Post,
   Param,
   Query,
+  Res,
+  Req,
 } from '@nestjs/common';
+import { Request, Response } from 'express';
 import { UUIDTypes } from 'uuid';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
+
+import IStreamService from 'src/Common/Application/Abstractions/Services/Stream/IStreamService';
 
 import MediaFileDownloadCommand from 'src/Media/Application/MediaFiles/MediaFileDownload/MediaFileDownloadCommand';
 import MediaFileGetByIdQuery from 'src/Media/Application/MediaFiles/MediaFileGet/MediaFileGetByIdQuery';
 import MediaFileGetAllQuery from 'src/Media/Application/MediaFiles/MediaFileGet/MediaFileGetAllQuery';
+import MediaFileGetFullPathQuery from 'src/Media/Application/MediaFiles/MediaFileGet/MediaFileGetFullPathQuery';
+
+import FileStreamService from 'src/Media/Infrastructure/Stream/FileStream/FileStreamService';
 
 import MediaFileDownloadDto from './Dtos/MediaFileDownloadDto';
 
@@ -21,6 +29,8 @@ export default class MediaFileController {
   constructor(
     @Inject<CommandBus>() private readonly commandBus: CommandBus,
     @Inject<QueryBus>() private readonly queryBus: QueryBus,
+    @Inject(FileStreamService.Token)
+    private readonly fileStreamService: IStreamService,
   ) {}
 
   @Get('say-hi')
@@ -35,6 +45,23 @@ export default class MediaFileController {
 
     if (result.IsSuccess) return result.Value;
     else return result.Error;
+  }
+
+  @Get(':id/stream')
+  async streamMediaFileById(
+    @Param('id') id: UUIDTypes,
+    @Req() request: Request,
+    @Res() response: Response,
+  ) {
+    const query = new MediaFileGetFullPathQuery(id);
+    const result = await this.queryBus.execute(query);
+
+    if (!result.IsSuccess) return result.Error;
+    await this.fileStreamService.Stream(
+      result.Value,
+      response,
+      request.headers.range,
+    );
   }
 
   @Get()

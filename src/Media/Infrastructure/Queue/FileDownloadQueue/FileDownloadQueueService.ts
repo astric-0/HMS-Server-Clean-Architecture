@@ -2,7 +2,7 @@ import { InjectQueue } from '@nestjs/bullmq';
 import { Injectable } from '@nestjs/common';
 import { Job, Queue } from 'bullmq';
 
-import IQueueService from 'src/Common/Application/Abstractions/Queue/IQueueService';
+import IQueueService from 'src/Common/Application/Abstractions/Services/Queue/IQueueService';
 import FileDownloadJobData from './FileDownloadJobData';
 
 @Injectable()

@@ -12,6 +12,7 @@ import MediaFileGetAllQueryHandler from './MediaFiles/MediaFileGet/MediaFileGetA
 
 import MediaDirectoryCreateCommandHandler from './MediaDirectories/MediaDirectoryCreate/MediaDirectoryCreateCommandHandler';
 import MediaDirectoryGetByIdQueryHandler from './MediaDirectories/MediaDirectoryGet/MediaDirectoryGetByIdQueryHandler';
+import MediaFileGetFullPathQueryHandler from './MediaFiles/MediaFileGet/MediaFileGetFullPathQueryHandler';
 
 @Module({
   imports: [QueueModule, PersistenceModule, CqrsModule, CacheModule.register()],
@@ -20,6 +21,7 @@ import MediaDirectoryGetByIdQueryHandler from './MediaDirectories/MediaDirectory
     MediaFileDownloadedEventHandler,
     MediaFileGetByIdQueryHandler,
     MediaFileGetAllQueryHandler,
+    MediaFileGetFullPathQueryHandler,
     MediaDirectoryCreateCommandHandler,
     MediaDirectoryGetByIdQueryHandler,
   ],

@@ -2,10 +2,11 @@ import { UUIDTypes } from 'uuid';
 
 export default class FileDownloadJobData {
   constructor(
-    public readonly MediaFileName: string,
+    public MediaFileName: string,
+    public readonly ThumbnailFileName: string,
     public readonly MediaDirectoryId: UUIDTypes,
     public readonly URL: string,
-    public readonly MediaFileFullPath: string,
-    public readonly MediaThumbnailFileFullPath: string,
+    public readonly MediaFilePath: string,
+    public readonly MediaThumbnailFilePath: string,
   ) {}
 }
