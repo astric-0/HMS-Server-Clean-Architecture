@@ -7,12 +7,13 @@ import {
 } from 'typeorm';
 import { UUIDTypes } from 'uuid';
 
-import IMediaFileRaw from 'src/Common/Application/Abstractions/Repositories/MediaFile/IMediaFileRaw';
 import {
   MediaFileName,
   MediaFileFullPath,
   MediaFileSize,
+  MediaThumbnailFullPath,
 } from 'src/Common/Domain/MediaFiles/ValueTypes';
+import IMediaFileRaw from 'src/Common/Application/Abstractions/Repositories/MediaFile/IMediaFileRaw';
 
 import MediaDirectoryEntity from './MediaDirectoryEntity';
 
@@ -72,4 +73,18 @@ export default class MediaFileEntity implements IMediaFileRaw {
     },
   })
   Size: MediaFileSize;
+
+  @Column({
+    name: 'thumbnail_full_path',
+    type: 'varchar',
+    transformer: {
+      from(value: string): MediaThumbnailFullPath {
+        return new MediaThumbnailFullPath(value);
+      },
+      to(thumbnailPath: MediaThumbnailFullPath): string {
+        return thumbnailPath.Value;
+      },
+    },
+  })
+  ThumbnailFullPath: MediaThumbnailFullPath;
 }

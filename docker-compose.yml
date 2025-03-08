@@ -16,6 +16,7 @@ services:
     volumes:
       - ./.env:/app/.env
       - ./node_modules:/app/node_modules
+      - ./media:/app/media
     networks:
       - app-network
 

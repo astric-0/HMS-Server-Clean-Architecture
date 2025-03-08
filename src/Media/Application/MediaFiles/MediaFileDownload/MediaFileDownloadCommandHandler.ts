@@ -2,6 +2,8 @@ import { UUIDTypes } from 'uuid';
 import { CommandHandler } from '@nestjs/cqrs';
 import { Job } from 'bullmq';
 import { Inject } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { basename, join, extname } from 'path';
 
 import Result from 'src/Common/Domain/Result';
 import Error, { ErrorType } from 'src/Common/Domain/Error';
@@ -17,7 +19,6 @@ import FileDownloadQueueService from 'src/Media/Infrastructure/Queue/FileDownloa
 import MediaDirectoryRepository from 'src/Media/Infrastructure/Persistence/Repositories/MediaDirectoryRepository';
 
 import MediaFileDownloadCommand from './MediaFileDownloadCommand';
-import { ConfigService } from '@nestjs/config';
 
 @CommandHandler(MediaFileDownloadCommand)
 export default class DownloadMediaFileCommandHandler
@@ -31,8 +32,11 @@ export default class DownloadMediaFileCommandHandler
     @Inject() private readonly configService: ConfigService,
   ) {}
 
-  private get BaseMediaPath() {
-    return this.configService.getOrThrow('BASE_MEDIA_DIR');
+  private get UniqueDirectoryPath() {
+    return join(
+      this.configService.getOrThrow('BASE_MEDIA_VIDEO_DIR'),
+      new Date().toISOString(),
+    );
   }
 
   public async execute(
@@ -44,11 +48,16 @@ export default class DownloadMediaFileCommandHandler
     if (!mediaDirectory?.Id)
       return Result.Failure(MediaDirectoryErrors.NotFound);
 
+    const fileDirectoryPath: string = this.UniqueDirectoryPath;
     const data: FileDownloadJobData = new FileDownloadJobData(
       command.MediaFileName,
       command.MediaDirectoryId as string,
       command.URL,
-      `${this.BaseMediaPath}/${mediaDirectory.FullPath}/${command.MediaFileName}`,
+      join(fileDirectoryPath, command.MediaFileName),
+      join(
+        fileDirectoryPath,
+        `${basename(command.MediaFileName, extname(command.MediaFileName))}.png`,
+      ),
     );
 
     try {

@@ -1,12 +1,14 @@
 import { UUIDTypes, v4 as uuidv4 } from 'uuid';
 
-import IMediaFileRaw from 'src/Common/Application/Abstractions/Repositories/MediaFile/IMediaFileRaw';
-import BaseEntity from 'src/Common/Application/Abstractions/Repositories/BaseEntity';
 import {
   MediaFileFullPath,
   MediaFileName,
   MediaFileSize,
+  MediaThumbnailFullPath,
 } from 'src/Common/Domain/MediaFiles/ValueTypes';
+import IMediaFileRaw from 'src/Common/Application/Abstractions/Repositories/MediaFile/IMediaFileRaw';
+import BaseEntity from 'src/Common/Application/Abstractions/Repositories/BaseEntity';
+
 import MediaDirectory from '../MediaDirectories/MediaDirectory';
 
 export default class MediaFile extends BaseEntity implements IMediaFileRaw {
@@ -14,6 +16,7 @@ export default class MediaFile extends BaseEntity implements IMediaFileRaw {
   #mediaDirectory: MediaDirectory;
   #fullPath: MediaFileFullPath;
   #size: MediaFileSize;
+  #thumbnailFullPath: MediaThumbnailFullPath;
 
   static readonly _masterDirectories: string[] = [
     'movie',
@@ -31,17 +34,21 @@ export default class MediaFile extends BaseEntity implements IMediaFileRaw {
     mediaDirectory: MediaDirectory,
     size: MediaFileSize,
     fullPath: MediaFileFullPath,
+    thumbnailFullPath: MediaThumbnailFullPath,
   ) {
     super(id);
     this.#name = fileName;
     this.#mediaDirectory = mediaDirectory;
     this.#size = size;
     this.#fullPath = fullPath;
+    this.#thumbnailFullPath = thumbnailFullPath;
   }
 
   public static Create(
     fileName: MediaFileName,
     mediaDirectory: MediaDirectory,
+    fullPath: MediaFileFullPath,
+    thumbnailFullPath: MediaThumbnailFullPath,
     size: MediaFileSize,
   ): MediaFile {
     const mediaFile = new MediaFile(
@@ -49,9 +56,8 @@ export default class MediaFile extends BaseEntity implements IMediaFileRaw {
       fileName,
       mediaDirectory,
       size,
-      new MediaFileFullPath(
-        `${mediaDirectory.FullPath ?? './'}/${fileName.Value}`,
-      ),
+      fullPath,
+      thumbnailFullPath,
     );
 
     return mediaFile;
@@ -66,6 +72,7 @@ export default class MediaFile extends BaseEntity implements IMediaFileRaw {
       MediaDirectory.FromRaw(raw.MediaDirectory),
       raw.Size,
       raw.FullPath,
+      raw.ThumbnailFullPath,
     );
 
     mediaFile.Created = raw.Created;
@@ -83,6 +90,10 @@ export default class MediaFile extends BaseEntity implements IMediaFileRaw {
 
   public get MediaDirectory(): MediaDirectory {
     return this.#mediaDirectory;
+  }
+
+  public get ThumbnailFullPath(): MediaThumbnailFullPath {
+    return this.#thumbnailFullPath;
   }
 
   public get Size(): MediaFileSize {
