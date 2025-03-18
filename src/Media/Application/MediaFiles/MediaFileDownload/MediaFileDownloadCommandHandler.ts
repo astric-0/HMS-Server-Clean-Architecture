@@ -15,8 +15,8 @@ import IMediaDirectoryRepository from 'src/Common/Application/Abstractions/Repos
 import MediaDirectory from 'src/Media/Domain/MediaDirectories/MediaDirectory';
 import MediaDirectoryErrors from 'src/Media/Domain/MediaDirectories/MediaDirectoryErrors';
 
-import FileDownloadJobData from 'src/Media/Infrastructure/Queue/FileDownloadQueue/FileDownloadJobData';
-import FileDownloadQueueService from 'src/Media/Infrastructure/Queue/FileDownloadQueue/FileDownloadQueueService';
+import FileDownloadJobData from 'src/Media/Infrastructure/Queue/FileDownload/FileDownloadJobData';
+import FileDownloadQueueService from 'src/Media/Infrastructure/Queue/FileDownload/FileDownloadQueueService';
 import MediaDirectoryRepository from 'src/Media/Infrastructure/Persistence/Repositories/MediaDirectoryRepository';
 
 import MediaFileDownloadCommand from './MediaFileDownloadCommand';

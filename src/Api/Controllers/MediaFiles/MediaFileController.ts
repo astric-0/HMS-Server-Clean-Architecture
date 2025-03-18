@@ -18,6 +18,7 @@ import IStreamService from 'src/Common/Application/Abstractions/Services/Stream/
 import MediaFileDownloadCommand from 'src/Media/Application/MediaFiles/MediaFileDownload/MediaFileDownloadCommand';
 import MediaFileGetByIdQuery from 'src/Media/Application/MediaFiles/MediaFileGet/MediaFileGetByIdQuery';
 import MediaFileGetAllQuery from 'src/Media/Application/MediaFiles/MediaFileGet/MediaFileGetAllQuery';
+import MediaFileExtractCommand from 'src/Media/Application/MediaFiles/MediaFileExtract/MediaFileExtractCommand';
 import MediaFileGetFullPathQuery from 'src/Media/Application/MediaFiles/MediaFileGet/MediaFileGetFullPathQuery';
 
 import FileStreamService from 'src/Media/Infrastructure/Stream/FileStream/FileStreamService';
@@ -85,5 +86,14 @@ export default class MediaFileController {
 
     const response = await this.commandBus.execute(command);
     return response.IsSuccess;
+  }
+
+  @Get(':id/extract')
+  async extractMediaFileById(@Param('id') id: UUIDTypes) {
+    const query = new MediaFileExtractCommand(id);
+    const result = await this.commandBus.execute(query);
+
+    if (!result.IsSuccess) return result.Error;
+    return result.IsSuccess;
   }
 }
