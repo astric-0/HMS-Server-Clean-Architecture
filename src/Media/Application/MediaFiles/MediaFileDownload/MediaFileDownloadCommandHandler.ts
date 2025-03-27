@@ -3,11 +3,10 @@ import { CommandHandler } from '@nestjs/cqrs';
 import { Job } from 'bullmq';
 import { Inject } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { basename, join, extname } from 'path';
+import { basename, join } from 'path';
 import contentDisposition from 'content-disposition';
 
 import Result from 'src/Common/Domain/Result';
-import Error, { ErrorType } from 'src/Common/Domain/Error';
 import ICommandHandler from 'src/Common/Application/Abstractions/Messaging/ICommandHandler';
 import IQueueService from 'src/Common/Application/Abstractions/Services/Queue/IQueueService';
 import IMediaDirectoryRepository from 'src/Common/Application/Abstractions/Repositories/MediaDirectory/IMediaDirectoryRepository';
@@ -18,6 +17,7 @@ import MediaDirectoryErrors from 'src/Media/Domain/MediaDirectories/MediaDirecto
 import FileDownloadJobData from 'src/Media/Infrastructure/Queue/FileDownload/FileDownloadJobData';
 import FileDownloadQueueService from 'src/Media/Infrastructure/Queue/FileDownload/FileDownloadQueueService';
 import MediaDirectoryRepository from 'src/Media/Infrastructure/Persistence/Repositories/MediaDirectoryRepository';
+import MediaFileErrors from 'src/Media/Domain/MediaFiles/MediaFileErrors';
 
 import MediaFileDownloadCommand from './MediaFileDownloadCommand';
 
@@ -56,10 +56,8 @@ export default class DownloadMediaFileCommandHandler
 
     const data: FileDownloadJobData = new FileDownloadJobData(
       mediaFileName,
-      `${basename(mediaFileName, extname(mediaFileName))}.png`,
-      command.MediaDirectoryId as string,
+      command.MediaDirectoryId,
       command.URL,
-      fileDirectoryPath,
       fileDirectoryPath,
     );
 
@@ -68,14 +66,8 @@ export default class DownloadMediaFileCommandHandler
         await this.fileDownloadQueueService.AddToQueue(data);
 
       return Result.Success(job.id);
-    } catch (error) {
-      return Result.Failure(
-        new Error(
-          'MediaFileDownload.Failure',
-          error.message,
-          ErrorType.Failure,
-        ),
-      );
+    } catch {
+      return Result.Failure(MediaFileErrors.DownloadError);
     }
   }
 

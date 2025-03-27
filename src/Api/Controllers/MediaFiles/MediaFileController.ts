@@ -24,6 +24,8 @@ import MediaFileGetFullPathQuery from 'src/Media/Application/MediaFiles/MediaFil
 import FileStreamService from 'src/Media/Infrastructure/Stream/FileStream/FileStreamService';
 
 import MediaFileDownloadDto from './Dtos/MediaFileDownloadDto';
+import MediaFileThumbnailDto from './Dtos/MediaFileThumbnailDto';
+import MediaFileCreateThumbnailCommand from 'src/Media/Application/MediaFiles/MediaFileThumbnail/MediaFileCreateThumbnailCommand';
 
 @Controller('media-file')
 export default class MediaFileController {
@@ -92,6 +94,19 @@ export default class MediaFileController {
   async extractMediaFileById(@Param('id') id: UUIDTypes) {
     const query = new MediaFileExtractCommand(id);
     const result = await this.commandBus.execute(query);
+
+    if (!result.IsSuccess) return result.Error;
+    return result.IsSuccess;
+  }
+
+  @Post('thumbnail')
+  async createMediaFileThumbnail(@Body() body: MediaFileThumbnailDto) {
+    const command = new MediaFileCreateThumbnailCommand(
+      body.MediaFileId,
+      body.OffSet,
+      body.FullPath,
+    );
+    const result = await this.commandBus.execute(command);
 
     if (!result.IsSuccess) return result.Error;
     return result.IsSuccess;

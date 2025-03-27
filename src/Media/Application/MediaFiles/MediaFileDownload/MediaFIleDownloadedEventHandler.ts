@@ -8,7 +8,6 @@ import {
 } from 'src/Common/Domain/MediaFiles/ValueTypes';
 import IMediaFileRepository from 'src/Common/Application/Abstractions/Repositories/MediaFile/IMediaFileRepository';
 import IMediaDirectoryRepository from 'src/Common/Application/Abstractions/Repositories/MediaDirectory/IMediaDirectoryRepository';
-import MediaThumbnailFullPath from 'src/Common/Domain/MediaFiles/ValueTypes/MediaThumbnailFullPath';
 
 import MediaFile from 'src/Media/Domain/MediaFiles/MediaFile';
 import MediaDirectory from 'src/Media/Domain/MediaDirectories/MediaDirectory';
@@ -37,10 +36,9 @@ export default class MediaFileDownloadedEventHandler
       new MediaFileName(event.MediaFileName),
       mediaDirectory,
       new MediaFileFullPath(event.MediaFileFullPath),
-      new MediaThumbnailFullPath(event.MediaThumbnailFullPath),
       new MediaFileSize(event.MediaFileSize),
     );
 
-    await this.mediaFileRepository.Add(mediaFile);
+    await this.mediaFileRepository.Save(mediaFile);
   }
 }

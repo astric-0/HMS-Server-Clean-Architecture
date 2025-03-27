@@ -67,15 +67,21 @@ export default class MediaFileRepository
     return mediaFiles;
   }
 
-  public async Add(mediaFile: MediaFile): Promise<MediaFile> {
+  public async Save(mediaFile: MediaFile): Promise<MediaFile> {
     const raw: IMediaFileRaw = await this.repository.save(mediaFile);
 
     return MediaFile.FromRaw(raw);
   }
 
+  async Update(id: UUIDTypes, fields: Partial<MediaFile>): Promise<boolean> {
+    const result = await this.repository.update({ Id: id as string }, fields);
+
+    return !!result.affected;
+  }
+
   public async Remove(id: UUIDTypes): Promise<boolean> {
     const deleteResult = await this.repository.delete({ Id: id as string });
 
-    return deleteResult.affected > 0;
+    return !!deleteResult.affected;
   }
 }

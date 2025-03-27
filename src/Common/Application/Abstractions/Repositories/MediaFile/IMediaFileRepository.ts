@@ -5,7 +5,9 @@ import { MediaFileFullPath } from 'src/Common/Domain/MediaFiles/ValueTypes';
 interface IMediaFileRepository<TDomainEntity extends IMediaFileRaw> {
   GetMediaFileById(id: UUIDTypes): Promise<TDomainEntity>;
 
-  Add(mediaFile: TDomainEntity): Promise<TDomainEntity>;
+  Save(mediaFile: TDomainEntity): Promise<TDomainEntity>;
+
+  Update(id: UUIDTypes, fields: Partial<TDomainEntity>): Promise<boolean>;
 
   GetMediaFiles(
     currentPage: number,

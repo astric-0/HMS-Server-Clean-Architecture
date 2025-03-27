@@ -3,6 +3,7 @@ import { BullModule } from '@nestjs/bullmq';
 
 import ApplicationEventPublisherModule from 'src/Common/Application/ApplicationPublisher/ApplicationEventPublisherModule';
 
+import FileDownloadService from './FileDownload/FileDownloadService';
 import FileDownloadQueueService from './FileDownload/FileDownloadQueueService';
 import FileDownloadProcessor from './FileDownload/FileDownloadProcessor';
 
@@ -27,6 +28,11 @@ import RarExtractionProcessor from './Extract/RarExtractionProcessor';
   ],
   providers: [
     FileDownloadProcessor,
+    FileDownloadService,
+    {
+      provide: FileDownloadService.Token,
+      useExisting: FileDownloadService,
+    },
     FileDownloadQueueService,
     {
       provide: FileDownloadQueueService.Token,
@@ -34,6 +40,10 @@ import RarExtractionProcessor from './Extract/RarExtractionProcessor';
     },
     RarExtractionProcessor,
     RarExtractionService,
+    {
+      provide: RarExtractionService.Token,
+      useExisting: RarExtractionService,
+    },
     RarExtractionQueueService,
     {
       provide: RarExtractionQueueService.Token,

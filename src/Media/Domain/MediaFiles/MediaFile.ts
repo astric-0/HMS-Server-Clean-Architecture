@@ -48,7 +48,6 @@ export default class MediaFile extends BaseEntity implements IMediaFileRaw {
     fileName: MediaFileName,
     mediaDirectory: MediaDirectory,
     fullPath: MediaFileFullPath,
-    thumbnailFullPath: MediaThumbnailFullPath,
     size: MediaFileSize,
   ): MediaFile {
     const mediaFile = new MediaFile(
@@ -57,7 +56,7 @@ export default class MediaFile extends BaseEntity implements IMediaFileRaw {
       mediaDirectory,
       size,
       fullPath,
-      thumbnailFullPath,
+      null,
     );
 
     return mediaFile;
@@ -94,6 +93,10 @@ export default class MediaFile extends BaseEntity implements IMediaFileRaw {
 
   public get ThumbnailFullPath(): MediaThumbnailFullPath {
     return this.#thumbnailFullPath;
+  }
+
+  public UpdateThumbnailFullPath(value: MediaThumbnailFullPath) {
+    this.#thumbnailFullPath = value;
   }
 
   public get Size(): MediaFileSize {
