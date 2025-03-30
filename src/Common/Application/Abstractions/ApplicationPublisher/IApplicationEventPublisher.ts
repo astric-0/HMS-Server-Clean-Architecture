@@ -1,4 +1,4 @@
-import { IApplicationEvent } from './IApplicationEvent';
+import IApplicationEvent from './IApplicationEvent';
 
 export default interface IApplicationEventPublisher {
   Publish(event: IApplicationEvent): void;

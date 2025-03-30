@@ -23,7 +23,7 @@ COPY --from=builder /app/dist ./dist
 
 WORKDIR /app
 
-EXPOSE 3000
+EXPOSE 3000 9229
 
 # Should show main.ts and other build outputs
 # CMD [""]  

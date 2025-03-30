@@ -1,6 +1,7 @@
 import { EventBus } from '@nestjs/cqrs';
 import { Injectable } from '@nestjs/common';
-import { IApplicationEvent } from '../Abstractions/ApplicationPublisher/IApplicationEvent';
+
+import IApplicationEvent from '../Abstractions/ApplicationPublisher/IApplicationEvent';
 import IApplicationEventPublisher from '../Abstractions/ApplicationPublisher/IApplicationEventPublisher';
 
 @Injectable()

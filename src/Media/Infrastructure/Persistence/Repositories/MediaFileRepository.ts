@@ -22,6 +22,15 @@ export default class MediaFileRepository
     private readonly repository: Repository<IMediaFileRaw>,
   ) {}
 
+  async CheckExistsById(id: UUIDTypes): Promise<boolean> {
+    const result = await this.repository.query(
+      'SELECT 1 FROM media_file WHERE id = $1 LIMIT 1',
+      [id as string],
+    );
+
+    return !!result.length;
+  }
+
   async GetFullPathById(id: UUIDTypes): Promise<MediaFileFullPath> {
     const result = await this.repository.query(
       'SELECT full_path FROM media_file WHERE id = $1 LIMIT 1',
@@ -71,6 +80,12 @@ export default class MediaFileRepository
     const raw: IMediaFileRaw = await this.repository.save(mediaFile);
 
     return MediaFile.FromRaw(raw);
+  }
+
+  public async SaveMany(mediaFiles: MediaFile[]): Promise<MediaFile[]> {
+    const rawFiles: IMediaFileRaw[] = await this.repository.save(mediaFiles);
+
+    return rawFiles.map(MediaFile.FromRaw);
   }
 
   async Update(id: UUIDTypes, fields: Partial<MediaFile>): Promise<boolean> {

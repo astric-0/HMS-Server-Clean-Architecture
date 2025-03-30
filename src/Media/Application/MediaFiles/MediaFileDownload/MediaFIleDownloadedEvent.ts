@@ -1,6 +1,6 @@
 import { UUIDTypes } from 'uuid';
 
-import { IApplicationEvent } from 'src/Common/Application/Abstractions/ApplicationPublisher/IApplicationEvent';
+import IApplicationEvent from 'src/Common/Application/Abstractions/ApplicationPublisher/IApplicationEvent';
 
 export default class MediaFileDownloadedEvent implements IApplicationEvent {
   public readonly OccuredOn: Date;

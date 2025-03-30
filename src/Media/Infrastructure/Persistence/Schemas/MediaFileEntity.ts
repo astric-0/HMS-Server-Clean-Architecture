@@ -77,12 +77,13 @@ export default class MediaFileEntity implements IMediaFileRaw {
   @Column({
     name: 'thumbnail_full_path',
     type: 'varchar',
+    nullable: true,
     transformer: {
       from(value: string): MediaThumbnailFullPath {
         return new MediaThumbnailFullPath(value);
       },
       to(thumbnailPath: MediaThumbnailFullPath): string {
-        return thumbnailPath.Value;
+        return thumbnailPath?.Value;
       },
     },
   })

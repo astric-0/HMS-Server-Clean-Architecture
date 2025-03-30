@@ -7,6 +7,8 @@ interface IMediaFileRepository<TDomainEntity extends IMediaFileRaw> {
 
   Save(mediaFile: TDomainEntity): Promise<TDomainEntity>;
 
+  SaveMany(mediaFile: TDomainEntity[]): Promise<TDomainEntity[]>;
+
   Update(id: UUIDTypes, fields: Partial<TDomainEntity>): Promise<boolean>;
 
   GetMediaFiles(
@@ -19,6 +21,8 @@ interface IMediaFileRepository<TDomainEntity extends IMediaFileRaw> {
   GetMediaFilesByIds(ids: UUIDTypes[]): Promise<TDomainEntity[]>;
 
   GetFullPathById(id: UUIDTypes): Promise<MediaFileFullPath>;
+
+  CheckExistsById(id: UUIDTypes): Promise<boolean>;
 }
 
 export default IMediaFileRepository;

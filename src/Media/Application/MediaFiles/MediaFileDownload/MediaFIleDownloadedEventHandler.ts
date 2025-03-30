@@ -15,7 +15,7 @@ import MediaDirectory from 'src/Media/Domain/MediaDirectories/MediaDirectory';
 import MediaFileRepository from 'src/Media/Infrastructure/Persistence/Repositories/MediaFileRepository';
 import MediaDirectoryRepository from 'src/Media/Infrastructure/Persistence/Repositories/MediaDirectoryRepository';
 
-import MediaFileDownloadedEvent from './MediaFIleDownloadedEvent';
+import MediaFileDownloadedEvent from './MediaFileDownloadedEvent';
 
 @EventsHandler(MediaFileDownloadedEvent)
 export default class MediaFileDownloadedEventHandler

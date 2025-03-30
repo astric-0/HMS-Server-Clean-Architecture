@@ -7,12 +7,13 @@ import PersistenceModule from '../Infrastructure/Persistence/PersistenceModule';
 import ServiceModule from '../Infrastructure/Services/ServiceModule';
 
 import MediaFileDownloadCommandHandler from './MediaFiles/MediaFileDownload/MediaFileDownloadCommandHandler';
-import MediaFileDownloadedEventHandler from './MediaFiles/MediaFileDownload/MediaFIleDownloadedEventHandler';
+import MediaFileDownloadedEventHandler from './MediaFiles/MediaFileDownload/MediaFileDownloadedEventHandler';
 import MediaFileGetByIdQueryHandler from './MediaFiles/MediaFileGet/MediaFileGetByIdQueryHandler';
 import MediaFileGetAllQueryHandler from './MediaFiles/MediaFileGet/MediaFileGetAllQueryHandler';
 import MediaFileGetFullPathQueryHandler from './MediaFiles/MediaFileGet/MediaFileGetFullPathQueryHandler';
 import MediaFileExtractCommandHandler from './MediaFiles/MediaFileExtract/MediaFileExtractCommandHandler';
 import MediaFileCreateThumbnailCommandHandler from './MediaFiles/MediaFileThumbnail/MediaFileCreateThumbnailCommandHandler';
+import MediaFileExtractedEventHandler from './MediaFiles/MediaFileExtract/MediaFileExtractedEventHandler';
 
 import MediaDirectoryCreateCommandHandler from './MediaDirectories/MediaDirectoryCreate/MediaDirectoryCreateCommandHandler';
 import MediaDirectoryGetByIdQueryHandler from './MediaDirectories/MediaDirectoryGet/MediaDirectoryGetByIdQueryHandler';
@@ -32,6 +33,7 @@ import MediaDirectoryGetByIdQueryHandler from './MediaDirectories/MediaDirectory
     MediaFileGetAllQueryHandler,
     MediaFileGetFullPathQueryHandler,
     MediaFileExtractCommandHandler,
+    MediaFileExtractedEventHandler,
     MediaFileCreateThumbnailCommandHandler,
     MediaDirectoryCreateCommandHandler,
     MediaDirectoryGetByIdQueryHandler,

@@ -6,6 +6,7 @@ services:
     container_name: hms-api
     ports:
       - "${PORT:-3000}:3000"
+      - "9229:9229"
     environment:
       - NODE_ENV=development
       - PORT=3000
@@ -14,11 +15,13 @@ services:
       - hms-db
       - hms-redis
     volumes:
-      - ./.env:/app/.env
-      - ./node_modules:/app/node_modules
-      - ./media:/app/media
+      # - ./.env:/app/.env
+      # - ./node_modules:/app/node_modules
+      # - ./media:/app/media
+      - ./:/app
     networks:
       - app-network
+    command: npm run start:debug
 
   hms-db:
     image: postgres:latest

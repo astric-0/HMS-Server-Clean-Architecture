@@ -2,12 +2,24 @@ import { WorkerHost } from '@nestjs/bullmq';
 import { Logger } from '@nestjs/common';
 import { Job } from 'bullmq';
 
-export default abstract class BaseProcessor<T> extends WorkerHost {
-  public abstract ProcessJob(job: Job<T>): Promise<void>;
+export default abstract class BaseProcessor<
+  TJobData,
+  TReturnType = void,
+> extends WorkerHost {
+  abstract ProcessJob(job: Job<TJobData>): Promise<TReturnType>;
 
-  public async process(job: Job<T>): Promise<void> {
+  abstract OnJobCompletion(
+    job: Job<TJobData> | void,
+    value: TReturnType,
+  ): Promise<void> | void;
+
+  public async process(job: Job<TJobData>): Promise<void> {
     Logger.log(`JOB STARTED: ${job.name}`);
-    await this.ProcessJob(job);
+
+    const value = await this.ProcessJob?.(job);
+
+    await this.OnJobCompletion?.(job, value);
+
     Logger.log(`JOB ENDED: ${job.name}`);
   }
 }
