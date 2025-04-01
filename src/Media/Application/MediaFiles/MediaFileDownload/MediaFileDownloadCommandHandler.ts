@@ -37,6 +37,7 @@ export default class DownloadMediaFileCommandHandler
     return join(
       this.configService.getOrThrow('BASE_MEDIA_VIDEO_DIR'),
       new Date().toISOString(),
+      '[Download]',
     );
   }
 

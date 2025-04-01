@@ -10,6 +10,8 @@ export default interface IFileService {
   GetSize(fullPath: string): Promise<number> | number;
 
   RemoveFile(fullPath: string): Promise<void> | void;
+
+  RemoveDirectory(fullPath: string): Promise<void> | void;
 }
 
 export type Stats = { filename: string; size: number };

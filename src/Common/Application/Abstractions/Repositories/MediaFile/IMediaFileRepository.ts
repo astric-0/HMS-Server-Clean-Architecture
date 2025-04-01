@@ -1,6 +1,8 @@
 import { UUIDTypes } from 'uuid';
-import IMediaFileRaw from './IMediaFileRaw';
+
 import { MediaFileFullPath } from 'src/Common/Domain/MediaFiles/ValueTypes';
+
+import IMediaFileRaw from './IMediaFileRaw';
 
 interface IMediaFileRepository<TDomainEntity extends IMediaFileRaw> {
   GetMediaFileById(id: UUIDTypes): Promise<TDomainEntity>;
@@ -16,7 +18,9 @@ interface IMediaFileRepository<TDomainEntity extends IMediaFileRaw> {
     pageSize: number,
   ): Promise<TDomainEntity[]>;
 
-  Remove(id: UUIDTypes): Promise<boolean>;
+  Remove(entity: TDomainEntity): Promise<boolean>;
+
+  RemoveById(id: UUIDTypes): Promise<boolean>;
 
   GetMediaFilesByIds(ids: UUIDTypes[]): Promise<TDomainEntity[]>;
 

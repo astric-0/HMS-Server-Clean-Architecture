@@ -13,7 +13,9 @@ interface IMediaDirectoryRepository<TDomainEntity extends IMediaDirectoryRaw> {
 
   Save(mediaDirectory: TDomainEntity): Promise<TDomainEntity>;
 
-  Remove(id: UUIDTypes): Promise<boolean>;
+  RemoveById(id: UUIDTypes): Promise<boolean>;
+
+  Remove(entity: TDomainEntity): Promise<boolean>;
 
   CheckMasterDirectoryExistsByName(name: MediaDirectoryName): Promise<boolean>;
 

@@ -14,6 +14,7 @@ import MediaFileGetFullPathQueryHandler from './MediaFiles/MediaFileGet/MediaFil
 import MediaFileExtractCommandHandler from './MediaFiles/MediaFileExtract/MediaFileExtractCommandHandler';
 import MediaFileCreateThumbnailCommandHandler from './MediaFiles/MediaFileThumbnail/MediaFileCreateThumbnailCommandHandler';
 import MediaFileExtractedEventHandler from './MediaFiles/MediaFileExtract/MediaFileExtractedEventHandler';
+import MediaFileDeleteCommandHandler from './MediaFiles/MediaFileDelete/MediaFileDeleteCommandHandler';
 
 import MediaDirectoryCreateCommandHandler from './MediaDirectories/MediaDirectoryCreate/MediaDirectoryCreateCommandHandler';
 import MediaDirectoryGetByIdQueryHandler from './MediaDirectories/MediaDirectoryGet/MediaDirectoryGetByIdQueryHandler';
@@ -35,6 +36,7 @@ import MediaDirectoryGetByIdQueryHandler from './MediaDirectories/MediaDirectory
     MediaFileExtractCommandHandler,
     MediaFileExtractedEventHandler,
     MediaFileCreateThumbnailCommandHandler,
+    MediaFileDeleteCommandHandler,
     MediaDirectoryCreateCommandHandler,
     MediaDirectoryGetByIdQueryHandler,
   ],

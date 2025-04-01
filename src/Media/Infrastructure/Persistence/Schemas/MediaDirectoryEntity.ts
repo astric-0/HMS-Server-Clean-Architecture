@@ -11,10 +11,12 @@ import {
 import { UUIDTypes } from 'uuid';
 
 import IMediaDirectoryRaw from 'src/Common/Application/Abstractions/Repositories/MediaDirectory/IMediaDirectoryRaw';
-import { MediaDirectoryName } from 'src/Common/Domain/MediaDirectory/ValueTypes';
+import {
+  MediaDirectoryName,
+  MediaDirectoryFullPath,
+} from 'src/Common/Domain/MediaDirectory/ValueTypes';
 
 import MediaFileEntity from './MediaFileEntity';
-import MediaDirectoryFullPath from 'src/Common/Domain/MediaDirectory/ValueTypes/MediaDirectoryFullPath';
 
 @Entity('media_directory')
 @Tree('closure-table')
@@ -64,4 +66,18 @@ export default class MediaDirectoryEntity implements IMediaDirectoryRaw {
     orphanedRowAction: 'delete',
   })
   MediaFiles: MediaFileEntity[];
+
+  public static FromRaw(raw: IMediaDirectoryRaw): MediaDirectoryEntity {
+    const entity: MediaDirectoryEntity = new MediaDirectoryEntity();
+
+    entity.Id = raw.Id;
+    entity.Children = raw.Children;
+    entity.Created = raw.Created;
+    entity.FullPath = raw.FullPath;
+    entity.FullPath = raw.FullPath;
+    entity.MediaFiles = raw.MediaFiles;
+    entity.Parent = raw.Parent;
+
+    return entity;
+  }
 }

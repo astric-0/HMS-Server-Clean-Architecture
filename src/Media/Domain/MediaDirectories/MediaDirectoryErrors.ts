@@ -18,4 +18,10 @@ export default class MediaDirectoryErrors {
     "Couldn't create media directory",
     ErrorType.Failure,
   );
+
+  public static readonly FailedToDelete: Error = new Error(
+    'MediaDirectory.Deletion.Failed',
+    "Couldn't remove media directory",
+    ErrorType.Failure,
+  );
 }

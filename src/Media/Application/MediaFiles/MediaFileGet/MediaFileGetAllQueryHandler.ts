@@ -39,7 +39,8 @@ export default class MediaFileGetAllQueryHandler extends CachedQueryHandler<
         const info: MediaFileInfoDto = {
           Id: fileInfo.Id,
           FileName: fileInfo.Name.Value,
-          MediaDirectory: fileInfo.MediaDirectory?.Name?.Value,
+          MediaDirectoryId: fileInfo.MediaDirectory?.Id,
+          MediaDirectoryName: fileInfo.MediaDirectory?.Name?.Value,
           Size: fileInfo.Size.Value,
           Created: fileInfo.Created,
         };

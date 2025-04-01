@@ -42,4 +42,10 @@ export default class MediaFileErrors {
     'Failed to complete the task for provided media',
     ErrorType.Validation,
   );
+
+  public static readonly UnableToDeleteMediaFile: Error = new Error(
+    'MediaFileDeletion.Failure',
+    'Failed to delete media file',
+    ErrorType.Failure,
+  );
 }

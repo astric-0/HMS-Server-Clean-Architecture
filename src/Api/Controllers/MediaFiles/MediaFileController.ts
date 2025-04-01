@@ -8,6 +8,7 @@ import {
   Query,
   Res,
   Req,
+  Delete,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { UUIDTypes } from 'uuid';
@@ -15,17 +16,18 @@ import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
 import IStreamService from 'src/Common/Application/Abstractions/Services/Stream/IStreamService';
 
-import MediaFileDownloadCommand from 'src/Media/Application/MediaFiles/MediaFileDownload/MediaFileDownloadCommand';
+import MediaFileGetFullPathQuery from 'src/Media/Application/MediaFiles/MediaFileGet/MediaFileGetFullPathQuery';
 import MediaFileGetByIdQuery from 'src/Media/Application/MediaFiles/MediaFileGet/MediaFileGetByIdQuery';
 import MediaFileGetAllQuery from 'src/Media/Application/MediaFiles/MediaFileGet/MediaFileGetAllQuery';
+import MediaFileDownloadCommand from 'src/Media/Application/MediaFiles/MediaFileDownload/MediaFileDownloadCommand';
 import MediaFileExtractCommand from 'src/Media/Application/MediaFiles/MediaFileExtract/MediaFileExtractCommand';
-import MediaFileGetFullPathQuery from 'src/Media/Application/MediaFiles/MediaFileGet/MediaFileGetFullPathQuery';
+import MediaFileCreateThumbnailCommand from 'src/Media/Application/MediaFiles/MediaFileThumbnail/MediaFileCreateThumbnailCommand';
+import MediaFileDeleteCommand from 'src/Media/Application/MediaFiles/MediaFileDelete/MediaFileDeleteCommand';
 
 import FileStreamService from 'src/Media/Infrastructure/Stream/FileStream/FileStreamService';
 
 import MediaFileDownloadDto from './Dtos/MediaFileDownloadDto';
 import MediaFileThumbnailDto from './Dtos/MediaFileThumbnailDto';
-import MediaFileCreateThumbnailCommand from 'src/Media/Application/MediaFiles/MediaFileThumbnail/MediaFileCreateThumbnailCommand';
 
 @Controller('media-file')
 export default class MediaFileController {
@@ -107,6 +109,15 @@ export default class MediaFileController {
       body.FullPath,
     );
     const result = await this.commandBus.execute(command);
+
+    if (!result.IsSuccess) return result.Error;
+    return result.IsSuccess;
+  }
+
+  @Delete(':id')
+  async deleteMediaFileById(@Param('id') id: UUIDTypes) {
+    const query = new MediaFileDeleteCommand(id);
+    const result = await this.commandBus.execute(query);
 
     if (!result.IsSuccess) return result.Error;
     return result.IsSuccess;

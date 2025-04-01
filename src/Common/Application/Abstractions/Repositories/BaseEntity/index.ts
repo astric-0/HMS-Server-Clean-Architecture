@@ -9,7 +9,7 @@ export default abstract class BaseEntity implements IBaseEntityRaw {
     this.Created = new Date();
   }
 
-  public get Id(): string {
+  public get Id(): UUIDTypes {
     return this.#id.toString();
   }
 

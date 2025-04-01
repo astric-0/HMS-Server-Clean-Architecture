@@ -64,6 +64,7 @@ export default class MediaDirectoryGetByIdQueryHandler extends CachedQueryHandle
           new MediaFileInfoDto(
             value.Id,
             value.Name.Value,
+            value?.MediaDirectory?.Id,
             value?.MediaDirectory?.Name?.Value,
             value.Size.Value,
             value.Created,

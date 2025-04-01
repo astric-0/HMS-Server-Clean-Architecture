@@ -94,9 +94,17 @@ export default class MediaFileRepository
     return !!result.affected;
   }
 
-  public async Remove(id: UUIDTypes): Promise<boolean> {
-    const deleteResult = await this.repository.delete({ Id: id as string });
+  public async RemoveById(id: UUIDTypes): Promise<boolean> {
+    const mediaFileRaw: IMediaFileRaw = await this.GetMediaFileById(id);
 
-    return !!deleteResult.affected;
+    if (!mediaFileRaw) return false;
+
+    return await this.Remove(mediaFileRaw as MediaFile);
+  }
+
+  public async Remove(mediaFile: MediaFile): Promise<boolean> {
+    await this.repository.remove(MediaFileEntity.FromRaw(mediaFile));
+
+    return true;
   }
 }

@@ -22,16 +22,16 @@ export default class MediaDirectoryRepository
     private readonly repository: Repository<IMediaDirectoryRaw>,
   ) {}
 
-  async CheckExistsById(id: UUIDTypes): Promise<boolean> {
+  public async CheckExistsById(id: UUIDTypes): Promise<boolean> {
     const result = await this.repository.query(
       'SELECT 1 FROM media_directory WHERE id = $1',
       [id as string],
     );
 
-    return !!result.length;
+    return result.length > 0;
   }
 
-  async GetByIds(ids: UUIDTypes[]): Promise<MediaDirectory[]> {
+  public async GetByIds(ids: UUIDTypes[]): Promise<MediaDirectory[]> {
     if (!ids || !ids.length) return [];
 
     const mediaDirectories: IMediaDirectoryRaw[] = await this.repository.find({
@@ -42,7 +42,7 @@ export default class MediaDirectoryRepository
     return mediaDirectories.map(MediaDirectory.FromRaw);
   }
 
-  async CheckMasterDirectoryExistsByName(
+  public async CheckMasterDirectoryExistsByName(
     name: MediaDirectoryName,
   ): Promise<boolean> {
     const result = await this.repository.query(
@@ -53,7 +53,7 @@ export default class MediaDirectoryRepository
     return !!result.length;
   }
 
-  async CheckIfExistsByNameAndParent(
+  public async CheckIfExistsByNameAndParent(
     name: MediaDirectoryName,
     id: UUIDTypes,
   ): Promise<boolean> {
@@ -62,10 +62,10 @@ export default class MediaDirectoryRepository
       [name.Value, id],
     );
 
-    return !!result.length;
+    return result.length > 0;
   }
 
-  async GetById(id: UUIDTypes): Promise<MediaDirectory> {
+  public async GetById(id: UUIDTypes): Promise<MediaDirectory> {
     if (!id) return null;
 
     const raw: IMediaDirectoryRaw = await this.repository.findOne({
@@ -78,7 +78,7 @@ export default class MediaDirectoryRepository
     return MediaDirectory.FromRaw(raw);
   }
 
-  async GetMasterDirectoryByName(
+  public async GetMasterDirectoryByName(
     name: MediaDirectoryName,
   ): Promise<MediaDirectory> {
     const raw: IMediaDirectoryRaw = await this.repository.findOneBy({
@@ -89,7 +89,7 @@ export default class MediaDirectoryRepository
     return MediaDirectory.FromRaw(raw);
   }
 
-  async GetMasterDirectories(): Promise<MediaDirectory[]> {
+  public async GetMasterDirectories(): Promise<MediaDirectory[]> {
     const rawDirectories: IMediaDirectoryRaw[] = await this.repository.find({
       where: { Parent: null },
     });
@@ -97,15 +97,23 @@ export default class MediaDirectoryRepository
     return rawDirectories.map(MediaDirectory.FromRaw);
   }
 
-  async Save(mediaDirectory: MediaDirectory): Promise<MediaDirectory> {
+  public async Save(mediaDirectory: MediaDirectory): Promise<MediaDirectory> {
     const raw: IMediaDirectoryRaw = await this.repository.save(mediaDirectory);
 
     return MediaDirectory.FromRaw(raw);
   }
 
-  async Remove(id: UUIDTypes): Promise<boolean> {
-    const deleteResult = await this.repository.delete({ Id: id as string });
+  public async RemoveById(id: UUIDTypes): Promise<boolean> {
+    const mediaDirectory: IMediaDirectoryRaw = await this.GetById(id);
 
-    return deleteResult.affected > 0;
+    if (!mediaDirectory) return false;
+
+    return await this.Remove(mediaDirectory as MediaDirectory);
+  }
+
+  public async Remove(mediaDirectory: MediaDirectory): Promise<boolean> {
+    await this.repository.remove(MediaDirectoryEntity.FromRaw(mediaDirectory));
+
+    return true;
   }
 }

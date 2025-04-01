@@ -56,6 +56,7 @@ export default class MediaFileEntity implements IMediaFileRaw {
   @ManyToOne(
     () => MediaDirectoryEntity,
     (mediaDirectory) => mediaDirectory.MediaFiles,
+    { onDelete: 'CASCADE' },
   )
   @JoinColumn({ name: 'media_directory_id' })
   MediaDirectory: MediaDirectoryEntity;
@@ -88,4 +89,18 @@ export default class MediaFileEntity implements IMediaFileRaw {
     },
   })
   ThumbnailFullPath: MediaThumbnailFullPath;
+
+  public static FromRaw(raw: IMediaFileRaw): MediaFileEntity {
+    const entity: MediaFileEntity = new MediaFileEntity();
+
+    entity.Id = raw.Id;
+    entity.Created = raw.Created;
+    entity.FullPath = raw.FullPath;
+    entity.MediaDirectory = raw.MediaDirectory;
+    entity.ThumbnailFullPath = raw.ThumbnailFullPath;
+    entity.Size = raw.Size;
+    entity.Name = raw.Name;
+
+    return entity;
+  }
 }

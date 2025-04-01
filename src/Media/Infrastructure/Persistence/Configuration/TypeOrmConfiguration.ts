@@ -15,6 +15,7 @@ export default class TypeOrmConfiguration implements TypeOrmOptionsFactory {
       autoLoadEntities: true,
       synchronize: false, // process.env.NODE_ENV !== 'production',
       logging: true,
+      subscribers: [__dirname + '/../**/Subscribers/*.{ts,js}'],
     };
   }
 }
