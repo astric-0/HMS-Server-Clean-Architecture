@@ -5,12 +5,14 @@ import { dirname, join, basename, extname } from 'path';
 
 import { MediaThumbnailFullPath } from 'src/Common/Domain/MediaFiles/ValueTypes';
 import Result from 'src/Common/Domain/Result';
+
 import ICommandHandler from 'src/Common/Application/Abstractions/Messaging/ICommandHandler';
 import IThumbnailService from 'src/Common/Application/Abstractions/Services/Thumbnail/IThumbnailService';
 import IMediaFileRepository from 'src/Common/Application/Abstractions/Repositories/MediaFile/IMediaFileRepository';
 
 import ThumbnailService from 'src/Media/Infrastructure/Services/Thumbnail/ThumbnailService';
 import MediaFileRepository from 'src/Media/Infrastructure/Persistence/Repositories/MediaFileRepository';
+
 import MediaFile from 'src/Media/Domain/MediaFiles/MediaFile';
 import MediaFileErrors from 'src/Media/Domain/MediaFiles/MediaFileErrors';
 

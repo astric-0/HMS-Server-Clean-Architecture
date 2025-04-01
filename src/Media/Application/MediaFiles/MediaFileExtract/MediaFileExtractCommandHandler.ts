@@ -1,3 +1,4 @@
+import { ConfigService } from '@nestjs/config';
 import { CommandHandler } from '@nestjs/cqrs';
 import { Inject } from '@nestjs/common';
 import { dirname, join } from 'path';
@@ -17,7 +18,6 @@ import MediaFileRepository from 'src/Media/Infrastructure/Persistence/Repositori
 import RarExtractionJobData from 'src/Media/Infrastructure/Queue/Extract/RarExtractionJobData';
 
 import MediaFileExtractCommand from './MediaFileExtractCommand';
-import { ConfigService } from '@nestjs/config';
 
 @CommandHandler(MediaFileExtractCommand)
 export default class MediaFileExtractCommandHandler

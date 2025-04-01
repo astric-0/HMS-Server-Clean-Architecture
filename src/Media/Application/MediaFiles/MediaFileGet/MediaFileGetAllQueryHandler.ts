@@ -8,6 +8,7 @@ import IMediaFileRepository from 'src/Common/Application/Abstractions/Repositori
 
 import MediaFile from 'src/Media/Domain/MediaFiles/MediaFile';
 import MediaFileRepository from 'src/Media/Infrastructure/Persistence/Repositories/MediaFileRepository';
+
 import MediaFileGetAllQuery from './MediaFileGetAllQuery';
 import MediaFileInfoDto from './MediaFileInfoDto';
 

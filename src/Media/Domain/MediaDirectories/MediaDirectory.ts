@@ -3,11 +3,12 @@ import { UUIDTypes, v4 as uuidv4 } from 'uuid';
 import BaseEntity from 'src/Common/Application/Abstractions/Repositories/BaseEntity';
 import IMediaDirectoryRaw from 'src/Common/Application/Abstractions/Repositories/MediaDirectory/IMediaDirectoryRaw';
 
-import { MediaDirectoryName } from 'src/Common/Domain/MediaDirectory/ValueTypes';
-import MediaFile from '../MediaFiles/MediaFile';
 import Result from 'src/Common/Domain/Result';
 import Error from 'src/Common/Domain/Error';
+import { MediaDirectoryName } from 'src/Common/Domain/MediaDirectory/ValueTypes';
 import MediaDirectoryFullPath from 'src/Common/Domain/MediaDirectory/ValueTypes/MediaDirectoryFullPath';
+
+import MediaFile from '../MediaFiles/MediaFile';
 
 export default class MediaDirectory
   extends BaseEntity

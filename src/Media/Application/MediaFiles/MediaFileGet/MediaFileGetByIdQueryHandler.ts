@@ -2,15 +2,17 @@ import { QueryHandler } from '@nestjs/cqrs';
 import { Inject } from '@nestjs/common';
 import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 
-import CachedQueryHandler from 'src/Common/Application/Abstractions/Messaging/CachedQueryHandler';
 import Result from 'src/Common/Domain/Result';
+import CachedQueryHandler from 'src/Common/Application/Abstractions/Messaging/CachedQueryHandler';
+import IMediaFileRepository from 'src/Common/Application/Abstractions/Repositories/MediaFile/IMediaFileRepository';
+
+import MediaFileRepository from 'src/Media/Infrastructure/Persistence/Repositories/MediaFileRepository';
+
+import MediaFileErrors from 'src/Media/Domain/MediaFiles/MediaFileErrors';
+import MediaFile from 'src/Media/Domain/MediaFiles/MediaFile';
 
 import MediaFileGetByIdQuery from './MediaFileGetByIdQuery';
 import MediaFileInfoDto from './MediaFileInfoDto';
-import MediaFileRepository from 'src/Media/Infrastructure/Persistence/Repositories/MediaFileRepository';
-import MediaFileErrors from 'src/Media/Domain/MediaFiles/MediaFileErrors';
-import MediaFile from 'src/Media/Domain/MediaFiles/MediaFile';
-import IMediaFileRepository from 'src/Common/Application/Abstractions/Repositories/MediaFile/IMediaFileRepository';
 
 @QueryHandler(MediaFileGetByIdQuery)
 export default class MediaFileGetByIdQueryHandler extends CachedQueryHandler<
