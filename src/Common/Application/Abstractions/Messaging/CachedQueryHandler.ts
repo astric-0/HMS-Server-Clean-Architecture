@@ -1,9 +1,11 @@
 import { Inject } from '@nestjs/common';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from '@nestjs/cache-manager';
+
+import Result from 'src/Common/Domain/Result';
+
 import ICachedQueryHandler from './ICachedQueryHandler';
 import CachedQuery from './CachedQuery';
-import Result from 'src/Common/Domain/Result';
 import IQueryHandler from './IQueryHandler';
 
 export default abstract class CachedQueryHandler<

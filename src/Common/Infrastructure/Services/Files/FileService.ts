@@ -25,9 +25,7 @@ export default class FileService {
     return join(...paths);
   }
 
-  public static async GetStats(
-    fullPath: string,
-  ): Promise<{ filename: string; size: number }> {
+  public static async GetStats(fullPath: string): Promise<Stats> {
     const stats = await stat(fullPath);
 
     const filename = basename(fullPath);

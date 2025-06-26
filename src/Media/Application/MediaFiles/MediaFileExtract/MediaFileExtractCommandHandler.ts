@@ -31,12 +31,8 @@ export default class MediaFileExtractCommandHandler
     @Inject() private readonly configService: ConfigService,
   ) {}
 
-  private get UniqueDirectoryPath() {
-    return join(
-      this.configService.getOrThrow('BASE_MEDIA_VIDEO_DIR'),
-      new Date().toISOString(),
-      '[Extracted]',
-    );
+  private get ExtractedDirectoryPath() {
+    return '[Extracted]';
   }
 
   async execute(command: MediaFileExtractCommand): Promise<Result<UUIDTypes>> {
@@ -51,7 +47,7 @@ export default class MediaFileExtractCommandHandler
         new RarExtractionJobData(
           command.MediaFileId,
           mediaFileFullPath,
-          join(dirname(mediaFileFullPath), this.UniqueDirectoryPath),
+          join(dirname(mediaFileFullPath), '..', this.ExtractedDirectoryPath),
         ),
       );
 
