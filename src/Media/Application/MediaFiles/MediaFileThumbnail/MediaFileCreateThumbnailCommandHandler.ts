@@ -33,7 +33,7 @@ export default class MediaFileCreateThumbnailCommandHandler
     configService: ConfigService,
   ) {
     this.AllowedVideoFormats =
-      configService.get('ALLOWED_VIDEO_FORMATS').split(',') || [];
+      configService.get('ALLOWED_VIDEO_FORMATS')?.split(',') || [];
   }
 
   async execute(
